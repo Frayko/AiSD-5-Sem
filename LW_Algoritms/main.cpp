@@ -1,4 +1,5 @@
 #include <iostream>
+#include "DinArray.h"
 
 using namespace std;
 
@@ -19,7 +20,17 @@ int main() {
 		cin >> input;
 		switch (input) {
 		case 1: {
-
+			DinArray <double> test(10);
+			cout << "size: " << test.check_size() << endl;
+			test.push(2);
+			test.push(0, 0);
+			test.push(3, 1);
+			test.print();
+			cout << endl;
+			test.pop();
+			test.pop(2);
+			test.pop(1);
+			test.print();
 			system("pause");
 			break;
 		}
