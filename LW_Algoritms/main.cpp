@@ -1,5 +1,6 @@
 #include <iostream>
 #include "DinArray.h"
+#include "listErrors.h"
 
 using namespace std;
 
@@ -18,28 +19,48 @@ int main() {
 		system("cls");
 		printMenu();
 		cin >> input;
-		switch (input) {
-		case 1: {
-			DinArray <double> test(10);
-			cout << "size: " << test.check_size() << endl;
-			test.push(2);
-			test.push(0, 0);
-			test.push(3, 1);
-			test.print();
-			cout << endl;
-			test.pop();
-			test.pop(2);
-			test.pop(1);
-			test.print();
-			system("pause");
-			break;
+
+		try {
+			switch (input) {
+			case 1: {
+				DinArray <double> test(10);
+				cout << "size: " << test.check_size() << endl;
+				test.print_stat();
+				test.push(2);
+				test.push(10, 0);
+				test.check_obj(2);
+				test.push(3, 1);
+				cout << "size: " << test.check_size() << endl;
+				test.print_stat();
+				test.print();
+				//DinArray<double>::rIterator iter(test);
+				//rIterator<double> iter2(test);
+				//cout << (iter != iter2) << endl;
+				cout << *iter << endl;
+				++iter;
+				cout << *iter << endl;
+				++iter;
+				cout << *iter << endl;
+				++iter;
+				cout << *iter << endl;
+
+				system("pause");
+				break;
+			}
+			case 0: { exit = true; break; }
+			default: {
+				cout << ">>> Ошибка ввода!\n>>> ";
+				system("pause");
+				break;
+			}
+			}
 		}
-		case 0: { exit = true; break; }
-		default: {
-			cout << ">>> Ошибка ввода!\n>>> ";
-			system("pause");
-			break;
+
+		catch (ArrayError& err) {
+			err.ErrMsg();
 		}
+		catch (...) {
+			cout << "Непредвиденная ошибка в while(exit)!" << endl;
 		}
 	}
 
