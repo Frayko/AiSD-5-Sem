@@ -44,18 +44,15 @@ public:
 	}
 
 	void Continue() const {
-		cerr << ">>> Программа продолжает работать.\n >>> ";
+		cerr << ">>> Программа продолжает работать.\n>>> ";
 	}
 };
 
-class IteratorRangedErr : public IteratorError {
+class IteratorInactive : public IteratorError {
 public:
-	IteratorRangedErr(int _count, int _actual) : count(_count), actual(_actual) {}
+	IteratorInactive() {}
 	void ErrMsg() const {
-		cerr << ">>> Ошибка позиционирования: возможная позиция от 0 до " << count << ". Переданная позиция: " << actual << endl;
+		cerr << ">>> Итератор находится в режиме 'неустановленный'.\n>>> Для последующего использования итератора воспользуйтесь функцией begin/rbegin." << endl;
 		Continue();
 	}
-private:
-	int count;
-	int actual;
 };
