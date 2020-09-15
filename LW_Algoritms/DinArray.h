@@ -4,7 +4,7 @@
 
 using namespace std;
 
-template <class Data>
+template <class Data = int>
 class DinArray {
 private:
 	Data* Array;
@@ -21,9 +21,9 @@ public:
 	DinArray(DinArray<Data>& DA);
 	~DinArray();
 	void push(Data obj);
-	void push(Data obj, int index);
+	bool push(Data obj, int index);
 	void pop();
-	void pop(int index);
+	bool pop(int index);
 	void print();
 	void print_stat();
 	int get_size();
@@ -32,7 +32,7 @@ public:
 	bool isEmpty();
 	bool check_obj(Data obj);
 	Data get_obj(int index);
-	void edit_obj(Data obj, int index);
+	bool edit_obj(Data obj, int index);
 	int get_index_obj(Data obj);
 	Data* get_Array();
 
@@ -41,14 +41,20 @@ public:
 		DinArray<Data>* mass;
 		Data* obj;
 		int cur;
-		bool isActive;
 	public:
 		Iterator(DinArray<Data>* _mass, int _cur);
 		Data operator*();
 		Iterator& operator++();
 		Iterator& operator--();
-		bool operator==(Iterator& _obj);
-		bool operator!=(Iterator& _obj);
+
+		bool operator==(Iterator other) {
+			return obj == other.obj;
+		}
+		bool operator!=(Iterator other) {
+			return obj != other.obj;
+		}
+		bool operator==(Iterator& other);
+		bool operator!=(Iterator& other);
 	};
 
 	class rIterator {
@@ -56,14 +62,20 @@ public:
 		DinArray<Data>* mass;
 		Data* obj;
 		int cur;
-		bool isActive;
 	public:
 		rIterator(DinArray<Data>* _mass, int _cur);
 		Data operator*();
 		rIterator& operator++();
 		rIterator& operator--();
-		bool operator==(rIterator& _obj);
-		bool operator!=(rIterator& _obj);
+
+		bool operator==(rIterator other) {
+			return obj == other.obj;
+		}
+		bool operator!=(rIterator other) {
+			return obj != other.obj;
+		}
+		bool operator==(rIterator& other);
+		bool operator!=(rIterator& other);
 	};
 
 	friend class Iterator;
@@ -140,9 +152,19 @@ void DinArray<Data>::push(Data obj) {
 }
 
 template <class Data>
-void DinArray<Data>::push(Data obj, int index) {
-	if (index > size || index < 0)
-		throw ArrayRangedErr(size, index);
+bool DinArray<Data>::push(Data obj, int index) {
+	try {
+		if (index > size || index < 0)
+			throw ArrayRangedErr(size, index);
+	}
+	catch (ArrayRangedErr& err) {
+		err.ErrMsg();
+		system("pause");
+		return false;
+	}
+	catch (...) {
+
+	}
 
 	if (size >= capacity)
 		capacity_increase();
@@ -152,6 +174,7 @@ void DinArray<Data>::push(Data obj, int index) {
 	Array[index] = obj;
 	size++;
 	push_by_index_count++;
+	return true;
 }
 
 template <class Data>
@@ -163,16 +186,27 @@ void DinArray<Data>::pop() {
 }
 
 template <class Data>
-void DinArray<Data>::pop(int index) {
-	if (size == 0)
-		throw ArrayDelErr();
-	if (index >= size || index < 0)
-		throw ArrayRangedErr(size - 1, index);
+bool DinArray<Data>::pop(int index) {
+	try {
+		if (size == 0)
+			throw ArrayDelErr();
+		if (index >= size || index < 0)
+			throw ArrayRangedErr(size - 1, index);
+	}
+	catch (ArrayRangedErr& err) {
+		err.ErrMsg();
+		system("pause");
+		return false;
+	}
+	catch (...) {
+
+	}
 
 	for (int i = index; i < size; i++)
 		Array[i] = Array[i + 1];
 	Array[size--] = NULL;
 	pop_by_index_count++;
+	return true;
 }
 
 template <class Data>
@@ -203,13 +237,23 @@ template <class Data>
 Data DinArray<Data>::get_obj(int index) {
 	if (index >= size || index < 0)
 		throw ArrayRangedErr(size - 1, index);
+
 	return Array[index];
 }
 
 template <class Data>
-void DinArray<Data>::edit_obj(Data obj, int index) {
-	if (index >= size || index < 0)
-		throw ArrayRangedErr(size - 1, index);
+bool DinArray<Data>::edit_obj(Data obj, int index) {
+	try {
+		if (index >= size || index < 0)
+			throw ArrayRangedErr(size - 1, index);
+	}
+	catch (ArrayRangedErr& err) {
+		err.ErrMsg();
+		system("pause");
+		return false;
+	}
+	catch (...) {}
+
 	Array[index] = obj;
 }
 
@@ -267,28 +311,30 @@ template <class Data>
 DinArray<Data>::Iterator::Iterator(DinArray<Data>* _mass, int _cur) {
 	mass = _mass;
 	cur = _cur;
-	obj = mass->get_Array() + cur;
 
 	if (cur >= mass->get_size())
-		isActive = false;
+		obj = nullptr;
 	else
-		isActive = true;
+		obj = mass->get_Array() + cur;
 }
 
 template <class Data>
 typename Data DinArray<Data>::Iterator::operator*() {
-	if (!isActive)
+	if (obj == nullptr)
 		throw IteratorInactive();
 	return *obj;
 }
 
 template <class Data>
 typename DinArray<Data>::Iterator& DinArray<Data>::Iterator::operator++() {
-	if (!isActive)
+	if (obj == nullptr)
 		throw IteratorInactive();
+
 	++cur;
-	if (cur >= mass->get_size())
-		isActive = false;
+	if (cur >= mass->get_size()) {
+		obj = nullptr;
+		return *this;
+	}
 
 	++obj;
 	return *this;
@@ -296,11 +342,14 @@ typename DinArray<Data>::Iterator& DinArray<Data>::Iterator::operator++() {
 
 template <class Data>
 typename DinArray<Data>::Iterator& DinArray<Data>::Iterator::operator--() {
-	if (!isActive)
+	if (obj == nullptr)
 		throw IteratorInactive();
+
 	--cur;
-	if (cur < 0)
-		isActive = false;
+	if (cur < 0) {
+		obj = nullptr;
+		return *this;
+	}
 
 	--obj;
 	return *this;
@@ -318,33 +367,34 @@ typename bool DinArray<Data>::Iterator::operator!=(DinArray<Data>::Iterator& oth
 
 
 
-
 template <class Data>
 DinArray<Data>::rIterator::rIterator(DinArray<Data>* _mass, int _cur) {
 	mass = _mass;
 	cur = _cur;
-	obj = mass->get_Array() + cur;
 
 	if (cur <= -1)
-		isActive = false;
-	else 
-		isActive = true;
+		obj = nullptr;
+	else
+		obj = mass->get_Array() + cur;
 }
 
 template <class Data>
 typename Data DinArray<Data>::rIterator::operator*() {
-	if (!isActive)
+	if (obj == nullptr)
 		throw IteratorInactive();
 	return *obj;
 }
 
 template <class Data>
 typename DinArray<Data>::rIterator& DinArray<Data>::rIterator::operator++() {
-	if (!isActive)
+	if (obj == nullptr)
 		throw IteratorInactive();
+
 	--cur;
-	if (cur < 0)
-		isActive = false;
+	if (cur < 0) {
+		obj = nullptr;
+		return *this;
+	}
 
 	--obj;
 	return *this;
@@ -352,11 +402,14 @@ typename DinArray<Data>::rIterator& DinArray<Data>::rIterator::operator++() {
 
 template <class Data>
 typename DinArray<Data>::rIterator& DinArray<Data>::rIterator::operator--() {
-	if (!isActive)
+	if (obj == nullptr)
 		throw IteratorInactive();
+
 	++cur;
-	if (cur >= mass->get_size())
-		isActive = false;
+	if (cur >= mass->get_size()) {
+		obj = nullptr;
+		return *this;
+	}
 
 	++obj;
 	return *this;

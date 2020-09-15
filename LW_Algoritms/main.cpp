@@ -38,10 +38,12 @@ int main() {
 				DinArray<double>::Iterator iter2 = test.end();
 				//Iterator<double> iter2(test);
 				//cout << (iter != iter2) << endl;
-				while (iter != iter2) {
+				while (iter != test.end()) {
 					cout << *iter << endl;
 					++iter;
 				}
+				++iter;
+				cout << *iter;
 
 				system("pause");
 				break;
@@ -65,7 +67,7 @@ int main() {
 			system("pause");
 		}
 		catch (...) {
-			cout << "Непредвиденная ошибка в while(exit)!" << endl;
+			cout << ">>> Непредвиденная ошибка в while(exit)!" << endl;
 			system("pause");
 		}
 	}
