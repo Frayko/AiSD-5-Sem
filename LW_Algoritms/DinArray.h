@@ -43,10 +43,13 @@ public:
 		int cur;
 	public:
 		Iterator(DinArray<Data>* _mass, int _cur);
-		Data operator*();
+		Data* operator*();
 		Iterator& operator++();
 		Iterator& operator--();
 
+		int get_cur() {
+			return cur;
+		}
 		bool operator==(Iterator other) {
 			return obj == other.obj;
 		}
@@ -64,10 +67,13 @@ public:
 		int cur;
 	public:
 		rIterator(DinArray<Data>* _mass, int _cur);
-		Data operator*();
+		Data* operator*();
 		rIterator& operator++();
 		rIterator& operator--();
 
+		int get_cur() {
+			return cur;
+		}
 		bool operator==(rIterator other) {
 			return obj == other.obj;
 		}
@@ -213,7 +219,9 @@ template <class Data>
 void DinArray<Data>::clear() {
 	if (Array)
 		delete[] Array;
+	capacity = n0;
 	Array = new int[capacity];
+	size = 0;
 }
 
 template <class Data>
@@ -267,9 +275,9 @@ int DinArray<Data>::get_index_obj(Data obj) {
 
 template <class Data>
 void DinArray<Data>::print() {
-	cout << endl << "Список элементов:" << endl;
-	for (int i = 0; i < size; i++)
-		cout << Array[i] << endl;
+	if(size > 0)
+		for (int i = 0; i < size; i++)
+			cout << Array[i] << ", ";
 }
 
 template <class Data>
@@ -319,10 +327,8 @@ DinArray<Data>::Iterator::Iterator(DinArray<Data>* _mass, int _cur) {
 }
 
 template <class Data>
-typename Data DinArray<Data>::Iterator::operator*() {
-	if (obj == nullptr)
-		throw IteratorInactive();
-	return *obj;
+typename Data* DinArray<Data>::Iterator::operator*() {
+	return obj;
 }
 
 template <class Data>
@@ -379,10 +385,8 @@ DinArray<Data>::rIterator::rIterator(DinArray<Data>* _mass, int _cur) {
 }
 
 template <class Data>
-typename Data DinArray<Data>::rIterator::operator*() {
-	if (obj == nullptr)
-		throw IteratorInactive();
-	return *obj;
+typename Data* DinArray<Data>::rIterator::operator*() {
+	return obj;
 }
 
 template <class Data>
