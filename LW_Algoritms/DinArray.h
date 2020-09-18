@@ -46,7 +46,6 @@ public:
 		Data* operator*();
 		Iterator& operator++();
 		Iterator& operator--();
-		friend class rIterator;
 
 		int get_cur() {
 			return cur;
