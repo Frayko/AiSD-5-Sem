@@ -46,10 +46,12 @@ public:
 		Data* operator*();
 		Iterator& operator++();
 		Iterator& operator--();
+		friend class rIterator;
 
 		int get_cur() {
 			return cur;
 		}
+		Data get_data();
 		bool operator==(Iterator other) {
 			return obj == other.obj;
 		}
@@ -74,6 +76,7 @@ public:
 		int get_cur() {
 			return cur;
 		}
+		Data get_data();
 		bool operator==(rIterator other) {
 			return obj == other.obj;
 		}
@@ -332,6 +335,13 @@ typename Data* DinArray<Data>::Iterator::operator*() {
 }
 
 template <class Data>
+typename Data DinArray<Data>::Iterator::get_data() {
+	if (obj == nullptr)
+		throw IteratorInactive();
+	return *obj;
+}
+
+template <class Data>
 typename DinArray<Data>::Iterator& DinArray<Data>::Iterator::operator++() {
 	if (obj == nullptr)
 		throw IteratorInactive();
@@ -387,6 +397,13 @@ DinArray<Data>::rIterator::rIterator(DinArray<Data>* _mass, int _cur) {
 template <class Data>
 typename Data* DinArray<Data>::rIterator::operator*() {
 	return obj;
+}
+
+template <class Data>
+typename Data DinArray<Data>::rIterator::get_data() {
+	if (obj == nullptr)
+		throw IteratorInactive();
+	return *obj;
 }
 
 template <class Data>

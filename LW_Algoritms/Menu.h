@@ -279,14 +279,14 @@ public:
 				}
 
 				case 3: {
-					cout << "Текущее значение: " << **iter << endl;
+					cout << "Текущее значение: " << iter->get_data() << endl;
 					system("pause");
 					break;
 				}
 
 				case 4: {
 					selectType buf;
-					cout << "Текущее значение: " << **iter << endl;
+					cout << "Текущее значение: " << iter->get_data() << endl;
 					cout << "Новое значение: ";
 					cin >> buf;
 					DA->edit_obj(buf, iter->get_cur());
