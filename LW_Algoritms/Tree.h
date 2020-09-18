@@ -13,10 +13,10 @@ private:
 
 public:
 	Tree();
-	bool push(Key _key);
+	bool push(Data _obj, Key _key);
 	bool pop(Key _key);
 	Data get_obj(Key _key);
-	bool set_obj(Key _key);
+	bool set_obj(Data _obj, Key _key);
 	bool isEmpty();
 	void clear();
 	int get_size();
