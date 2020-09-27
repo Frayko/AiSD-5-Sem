@@ -7,13 +7,13 @@ using namespace std;
 template <class Data = int>
 class DinArray {
 private:
-	Data* Array;
-	int capacity;
-	int size;
-	int n0;
-	int match_count;
-	int push_by_index_count;
-	int pop_by_index_count;
+	Data* Array;						//динамический массив
+	int n0;								//базовая мощность
+	int capacity;						//мощность
+	int size;							//текущий размер
+	int match_count;					//счётчик количества совпадений при использовании поиска по объекту
+	int push_by_index_count;			//счётчик количества добавлений элемента с использованием индекса
+	int pop_by_index_count;				//счётчик количества удалений элемента с использованием индекса
 
 public:
 	DinArray();
