@@ -8,33 +8,49 @@ template <class Key = int, class Data = int>
 class Tree {
 private:
 
-	template <class Key = int, class Data = int>
-	class Elem {
-	public:
+	class Node {
+	private:
 		Key key;
-		Data obj;
-		Elem* l, r;
+		Data data;
+		Node *left, *right;
 
-		Elem(Key key = Key(), Data obj = Data(), Elem* l = nullptr, Elem* r = nullptr) : key(key), obj(obj), l(l), r(r) {}
-		//Elem(Elem<Key, Data>& other) : key(other.key), obj(other.obj), l(other.l), r(other.r) {}
+	public:
+		Node(Key key = Key(), Data data = Data(), Node* left = nullptr, Node* right = nullptr) : key(key), data(data), left(left), right(right) {}
+
+		Key getKey();
+		void setKey(Key key);
+		Data getData();
+		void setData(Data data);
+		Node* getLeft();
+		void setLeft(Node* left);
+		Node* getRight();
+		void setRight(Node* right);
 	};
 
-	int count;
-	Elem<Key, Data>* head;
+	int size;
+	Node* root;
+
+	void clear(Node* node);
+	bool insert(Key key, Data data, Node* parent, Node* cur);
+	Node* getNode(Key key, Node* cur);
+	bool remove(Key key, Node* cur);
 
 public:
 	Tree();
 	Tree(Tree& t);
-	void push(Data _obj, Key _key, Tree<Key, Data>& t);
-	bool pop(Key _key, Tree<Key, Data>& t);
-	Elem<Key, Data> find_max_min(Tree<Key, Data>::Elem<Key, Data>& t);
-	Data get_obj(Key _key, Tree<Key, Data>& t);
-	bool set_obj(Data _obj, Key _key, Tree<Key, Data>& t);
-	bool isEmpty();
+	~Tree();
+
 	void clear();
-	int get_size();
+	Node* getRoot();
+	int getSize();
+	bool isEmpty();
+	bool insert(Key key, Data data);
+	bool remove(Key key);
+	Node* getNode(Key key);
+	Data getData(Key key);
+	bool setData(Key key, Data data);
 	void print();
-	int get_serial_number(Key _key);
+	int getSerialNumber(Key key);
 
 	class Iterator {
 
@@ -54,65 +70,204 @@ public:
 	rIterator rend();
 };
 
+
+//-------------------Node---------------------//
+
+template <class Key, class Data>
+Key Tree<Key, Data>::Node::getKey() {
+	return key;
+}
+
+template <class Key, class Data>
+void Tree<Key, Data>::Node::setKey(Key key) {
+	this->key = key;
+}
+
+template <class Key, class Data>
+Data Tree<Key, Data>::Node::getData() {
+	return data;
+}
+
+template <class Key, class Data>
+void Tree<Key, Data>::Node::setData(Data data) {
+	this->data = data;
+}
+
+template <class Key, class Data>
+typename Tree<Key, Data>::Node* Tree<Key, Data>::Node::getLeft() {
+	return left;
+}
+
+template <class Key, class Data>
+void Tree<Key, Data>::Node::setLeft(Node* left) {
+	this->left = left;
+}
+
+template <class Key, class Data>
+typename Tree<Key, Data>::Node* Tree<Key, Data>::Node::getRight() {
+	return right;
+}
+
+template <class Key, class Data>
+void Tree<Key, Data>::Node::setRight(Node* right) {
+	this->right = right;
+}
+
+//-------------------Tree---------------------//
+
 template <class Key, class Data>
 Tree<Key, Data>::Tree() {
-	count = 0;
-	head = new Elem();
+	size = 0;
+	root = nullptr;
 }
 
 template <class Key, class Data>
 Tree<Key, Data>::Tree(Tree<Key, Data>& t) {
-	count = t.count;
-	head = t.head;
+	//TODO
 }
 
 template <class Key, class Data>
-void Tree<Key, Data>::push(Data _obj, Key _key, Tree<Key, Data>& t) {
-	Elem<Key, Data>* tmp = new Elem<Key, Data>(_obj, _key);
-
-	if (head == nullptr || head->obj == NULL) {
-		head = tmp;
-	}
-	else {
-		Elem<Key, Data>* tree = head;
-		if (tree->key > _key)
-			push(_obj, _key, tree->l);
-		else
-			push(_obj, _key, tree->r);
-	}
-
-
+Tree<Key, Data>::~Tree() {
+	if (this->isEmpty())
+		this->clear();
 }
 
-//template <class Key, class Data>
-//bool Tree<Key, Data>::pop(Key _key, Tree<Key, Data>& t) {
-//	if (head == nullptr || head->obj == NULL)
-//		throw TreeDelErr();
-//
-//	Elem<Key, Data>* tree = head;
-//	if (tree->key == _key) {
-//		if (tree->r != nullptr) {
-//			tree->key = tree->r->key;
-//			tree->obj = tree->r->obj;
-//			//tree->r = tree->
-//		}
-//	}
-//	if else (tree->key > _key)
-//		pop(_key, tree);
-//}
-//
-//template <class Key, class Data>
-//Tree<Key, Data>::Elem<Key, Data> Tree<Key, Data>::find_max_min(Tree<Key, Data>::Elem<Key, Data>& t) {
-//	if (t.r == nullptr && t.l != nullptr) {
-//		Elem<Key, Data>* temp = t;
-//		t = t.l;
-//		return temp;
-//	}
-//	else if (t.r == nullptr && t.l == nullptr) {
-//		Elem<Key, Data>* temp = t;
-//		t = nullptr;
-//		return temp;
-//	}
-//	else
-//		find_max_min(t.r);
-//}
+template <class Key, class Data>
+void Tree<Key, Data>::clear(Node* node) {
+	if (node) {
+		this->clear(node->getLeft());
+		this->clear(node->getRight());
+		delete node;
+		this->size--;
+	}
+}
+
+template <class Key, class Data>
+void Tree<Key, Data>::clear() {
+	this->clear(this->root);
+	this->root = nullptr;
+	size = 0;
+}
+
+template <class Key, class Data>
+typename Tree<Key, Data>::Node* Tree<Key, Data>::getRoot() {
+	return root;
+}
+
+template <class Key, class Data>
+int Tree<Key, Data>::getSize() {
+	return this->size;
+}
+
+template <class Key, class Data>
+bool Tree<Key, Data>::isEmpty() {
+	return this->size == 0;
+}
+
+template <class Key, class Data>
+bool Tree<Key, Data>::insert(Key key, Data data) {
+
+	if (!root)
+		root = new Node(key, data);
+	else {
+		if (root->getKey() > key)
+			insert(key, data, root, root->getLeft());
+		else if (root->getKey() < key)
+			insert(key, data, root, root->getRight());
+		else
+			return false;
+	}
+
+	this->size++;
+	return true;
+}
+
+template <class Key, class Data>
+bool Tree<Key, Data>::insert(Key key, Data data, Tree<Key, Data>::Node* parent, Tree<Key, Data>::Node* cur) {
+	if (!cur) {
+		cur = new Node(key, data);
+		if (parent->getKey() > key)
+			parent->setLeft(cur);
+		else
+			parent->setRight(cur);
+	}
+
+	else {
+		if (cur->getKey() > key)
+			insert(key, data, cur, cur->getLeft());
+		else if (cur->getKey() < key)
+			insert(key, data, cur, cur->getRight());
+		else
+			return false;
+	}
+
+	return true;
+}
+
+template <class Key, class Data>
+bool Tree<Key, Data>::remove(Key key) {
+	try {
+
+	}
+	catch (TreeError& te) {
+		te.ErrMsg();
+		return false;
+	}
+}
+
+template <class Key, class Data>
+bool Tree<Key, Data>::remove(Key key, Node* node) {
+}
+
+template <class Key, class Data>
+typename Tree<Key, Data>::Node* Tree<Key, Data>::getNode(Key key) {
+	if (!root)
+		throw TreeIsEmpty();
+	Node* node = nullptr;
+
+	if (root->getKey() == key)
+		node = this->root;
+	else if (root->getKey() > key)
+		node = getNode(key, root->getLeft());
+	else
+		node = getNode(key, root->getRight());
+
+	if (!node)
+		throw TreeFindErr();
+
+	return node;
+}
+
+template <class Key, class Data>
+typename Tree<Key, Data>::Node* Tree<Key, Data>::getNode(Key key, Node* node) {
+	if (!node)
+		return node;
+
+	if (node->getKey() == key)
+		return node;
+	else if (node->getKey() > key)
+		node = getNode(key, node->getLeft());
+	else
+		node = getNode(key, node->getRight());
+}
+
+template <class Key, class Data>
+Data Tree<Key, Data>::getData(Key key) {
+	Node* node = getNode(key);
+	return node->getData();
+}
+
+template <class Key, class Data>
+bool Tree<Key, Data>::setData(Key key, Data data) {
+	try {
+		Node* node = getNode(key);
+		node->setData(data);
+		return true;
+	}
+	catch (TreeError& te) {
+		te.ErrMsg();
+		return false;
+	}
+}
+
+//--------------------------------------------//

@@ -7,11 +7,20 @@ public:
 	TreeError() {}
 
 	virtual void ErrMsg() const {
-		cerr << ">>> Ошибка в работе с деревом!\n";
+		cerr << ">>> Ошибка при работе с деревом!\n";
 	}
 
 	void Continue() const {
 		cerr << ">>> Программа продолжает работать.\n>>> ";
+	}
+};
+
+class TreeIsEmpty : public TreeError {
+public:
+	TreeIsEmpty() {}
+	void ErrMsg() const {
+		cerr << ">>> Ошибка при работе с пустым деревом!\n";
+		Continue();
 	}
 };
 
@@ -20,6 +29,15 @@ public:
 	TreeDelErr() {}
 	void ErrMsg() const {
 		cerr << ">>> Ошибка удаления! Дерево пусто!\n";
+		Continue();
+	}
+};
+
+class TreeFindErr : public TreeError {
+public:
+	TreeFindErr() {}
+	void ErrMsg() const {
+		cerr << ">>> Ошибка поиска! Искомый узел не был найден!\n";
 		Continue();
 	}
 };
