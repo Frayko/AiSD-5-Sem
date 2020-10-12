@@ -24,9 +24,12 @@ public:
 	bool push(Data obj, int index);
 	void pop();
 	bool pop(int index);
+	bool pop_by_obj(Data obj);
 	void print();
 	void print_stat();
+	int get_capacity();
 	int get_size();
+	void capacity_decrease();
 	void capacity_increase();
 	void clear();
 	bool isEmpty();
@@ -141,9 +144,26 @@ int DinArray<Data>::get_size() {
 }
 
 template <class Data>
+int DinArray<Data>::get_capacity() {
+	return capacity;
+}
+
+template <class Data>
+void DinArray<Data>::capacity_decrease() {
+	Data* buf = new Data[capacity];
+	for (int i = 0; i < size; i++)
+		buf[i] = Array[i];
+	capacity = size + n0;
+	Array = new Data[capacity];
+	for (int i = 0; i < size; i++)
+		Array[i] = buf[i];
+}
+
+template <class Data>
 void DinArray<Data>::capacity_increase() {
 	Data* buf = new Data[capacity];
-	buf = Array;
+	for (int i = 0; i < size; i++)
+		buf[i] = Array[i];
 	delete[] Array;
 	capacity = capacity + n0;
 	Array = new Data[capacity];
@@ -161,18 +181,8 @@ void DinArray<Data>::push(Data obj) {
 
 template <class Data>
 bool DinArray<Data>::push(Data obj, int index) {
-	try {
-		if (index > size || index < 0)
-			throw ArrayRangedErr(size, index);
-	}
-	catch (ArrayRangedErr& err) {
-		err.ErrMsg();
-		system("pause");
+	if (index > size || index < 0)
 		return false;
-	}
-	catch (...) {
-
-	}
 
 	if (size >= capacity)
 		capacity_increase();
@@ -191,30 +201,46 @@ void DinArray<Data>::pop() {
 		throw ArrayDelErr();
 
 	Array[size--] = NULL;
+
+	if ((capacity / 2) >= size) {
+		capacity_decrease();
+	}
 }
 
 template <class Data>
 bool DinArray<Data>::pop(int index) {
-	try {
-		if (size == 0)
-			throw ArrayDelErr();
-		if (index >= size || index < 0)
-			throw ArrayRangedErr(size - 1, index);
-	}
-	catch (ArrayRangedErr& err) {
-		err.ErrMsg();
-		system("pause");
+	if (size == 0 || index >= size || index < 0)
 		return false;
-	}
-	catch (...) {
-
-	}
 
 	for (int i = index; i < size; i++)
 		Array[i] = Array[i + 1];
 	Array[size--] = NULL;
 	pop_by_index_count++;
+
+	if ((capacity / 2) >= size) {
+		capacity_decrease();
+	}
 	return true;
+}
+
+template <class Data>
+bool DinArray<Data>::pop_by_obj(Data obj) {
+	if (size == 0)
+		return false;
+
+	for (int i = 0; i < size; i++) {
+		if (obj == Array[i]) {
+			for (int j = i; j < size; j++)
+				Array[j] = Array[j + 1];
+			Array[size--] = NULL;
+			if ((capacity / 2) >= size) {
+				capacity_decrease();
+			}
+			return true;
+		}
+	}
+
+	return false;
 }
 
 template <class Data>
@@ -253,18 +279,12 @@ Data DinArray<Data>::get_obj(int index) {
 
 template <class Data>
 bool DinArray<Data>::edit_obj(Data obj, int index) {
-	try {
-		if (index >= size || index < 0)
-			throw ArrayRangedErr(size - 1, index);
-	}
-	catch (ArrayRangedErr& err) {
-		err.ErrMsg();
-		system("pause");
+	if (index >= size || index < 0)
 		return false;
-	}
-	catch (...) {}
 
 	Array[index] = obj;
+
+	return true;
 }
 
 template <class Data>

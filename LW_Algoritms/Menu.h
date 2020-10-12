@@ -30,6 +30,8 @@ public:
 			<< "[18]	Iterator == rIterator" << endl
 			<< "[19]	Iterator == end()" << endl
 			<< "[20]	rIterator == rend()" << endl
+			<< "[21]	Узнать ёмкость массива" << endl
+			<< "[22]	Удалить элемент по значению" << endl
 			<< "[0]	Выход" << endl
 			<< endl << ">>> ";
 	}
@@ -64,7 +66,8 @@ public:
 			else
 				DA.print();
 
-			cout << endl << "Размер массива: " << DA.get_size() << endl << endl;
+			cout << endl << "Размер массива: " << DA.get_size();
+			cout << endl << "Ёмкость массива: " << DA.get_capacity() << endl << endl;
 			printMainMenu();
 			cin >> input;
 
@@ -84,10 +87,7 @@ public:
 				}
 
 				case 3: {
-					if (DA.isEmpty())
-						cout << ">>> Массив пуст!" << endl;
-					else
-						cout << ">>> Массив не пуст!" << endl;
+					cout << "Результат: " << DA.isEmpty() << endl;
 					system("pause");
 					break;
 				}
@@ -115,9 +115,9 @@ public:
 					int index;
 					cout << "Введите индекс: ";
 					cin >> index;
-					cout << ">>> Текущее значение: " << DA.get_obj(index) << endl << "Новое значение: ";
+					cout << "Новое значение: ";
 					cin >> buf;
-					cout << endl << DA.edit_obj(buf, index);
+					cout << endl << "Результат: " << DA.edit_obj(buf, index) << endl;
 					system("pause");
 					break;
 				}
@@ -231,6 +231,21 @@ public:
 					break;
 				}
 
+				case 21: {
+					cout << ">>> Ёмкость массива: " << DA.get_capacity() << endl;
+					system("pause");
+					break;
+				}
+
+				case 22: {
+					selectType obj;
+					cout << ">>> Удаление" << endl << ">>> Введите значение: ";
+					cin >> obj;
+					cout << endl << "Результат: " << DA.pop_by_obj(obj) << endl;
+					system("pause");
+					break;
+				}
+
 				case 0: { exit = true; break; }
 				default: {
 					cout << ">>> Ошибка ввода!\n>>> ";
@@ -289,7 +304,7 @@ public:
 					cout << "Текущее значение: " << iter->get_data() << endl;
 					cout << "Новое значение: ";
 					cin >> buf;
-					DA->edit_obj(buf, iter->get_cur());
+					cout << endl << DA->edit_obj(buf, iter->get_cur()) << endl;
 					system("pause");
 					break;
 				}
@@ -350,17 +365,17 @@ public:
 				}
 
 				case 3: {
-					cout << "Текущее значение: " << **riter << endl;
+					cout << "Текущее значение: " << riter->get_data() << endl;
 					system("pause");
 					break;
 				}
 
 				case 4: {
 					selectType buf;
-					cout << "Текущее значение: " << **riter << endl;
+					cout << "Текущее значение: " << riter->get_data() << endl;
 					cout << "Новое значение: ";
 					cin >> buf;
-					DA->edit_obj(buf, riter->get_cur());
+					cout << endl << DA->edit_obj(buf, riter->get_cur()) << endl;
 					system("pause");
 					break;
 				}

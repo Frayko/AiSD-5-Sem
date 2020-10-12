@@ -8,7 +8,7 @@
 int main() {
 	setlocale(LC_ALL, "rus");
 
-	DinArray<int> DA(10);
+	DinArray<int> DA(2);
 	Menu::startMenu(DA);
 
 	return 0;
