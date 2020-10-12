@@ -9,21 +9,14 @@ public:
 	virtual void ErrMsg() const {
 		cerr << ">>> Ошибка работы динамического массива!\n";
 	}
-
-	void Continue() const {
-		cerr << ">>> Программа продолжает работать.\n>>> ";
-	}
 };
 
 class ArrayRangedErr : public ArrayError {
 public:
-	ArrayRangedErr(int _count, int _actual) : count(_count), actual(_actual) {}
+	ArrayRangedErr() {}
 	void ErrMsg() const {
-		cerr << ">>> Ошибка индекса: возможный индекс от 0 до " << count << ". Переданный индекс: " << actual << endl;
-		Continue();
+		cerr << ">>> Ошибка при работе с индексом" << endl;
 	}
-private:
-	int count, actual;
 };
 
 class ArrayDelErr : public ArrayError {
@@ -31,7 +24,6 @@ public:
 	ArrayDelErr() {}
 	void ErrMsg() const {
 		cerr << ">>> Ошибка удаления! Список пуст!\n";
-		Continue();
 	}
 };
 
@@ -42,17 +34,12 @@ public:
 	virtual void ErrMsg() const {
 		cerr << ">>> Ошибка работы итератора!\n";
 	}
-
-	void Continue() const {
-		cerr << ">>> Программа продолжает работать.\n>>> ";
-	}
 };
 
 class IteratorInactive : public IteratorError {
 public:
 	IteratorInactive() {}
 	void ErrMsg() const {
-		cerr << ">>> Итератор находится в режиме 'неустановленный'.\n>>> Для последующего использования итератора воспользуйтесь функцией begin/rbegin." << endl;
-		Continue();
+		cerr << ">>> Ошибка при работе с итератором" << endl;
 	}
 };

@@ -10,28 +10,28 @@ class Menu {
 public:
 	static void printMainMenu() {
 		cout << "Меню программы:" << endl
-			<< "[1]	Узнать размер массива" << endl
-			<< "[2]	Очистка массива" << endl
-			<< "[3]	Проверить массив на пустоту" << endl
-			<< "[4]	Узнать наличие заданного значения" << endl
-			<< "[5]	Прочитать значение по индексу" << endl
-			<< "[6]	Изменить значение по индексу" << endl
-			<< "[7]	Получить позицию в массиве с заданным значением" << endl
-			<< "[8]	Добавить новый элемент" << endl
-			<< "[9]	Добавить новый элемент по индексу" << endl
-			<< "[10]	Удалить элемент" << endl
-			<< "[11]	Удалить элемент по индексу" << endl
-			<< "[12]	Запрос прямого итератора" << endl
-			<< "[13]	Запрос обратного итератора" << endl
-			<< "[14]	Запрос неустановленного прямого итератора" << endl
-			<< "[15]	Запрос неустановленного обратного итератора" << endl
-			<< "[16]	Вывести статистику по индексам" << endl
-			<< "[17]	Вывести массив" << endl
-			<< "[18]	Iterator == rIterator" << endl
-			<< "[19]	Iterator == end()" << endl
-			<< "[20]	rIterator == rend()" << endl
-			<< "[21]	Узнать ёмкость массива" << endl
-			<< "[22]	Удалить элемент по значению" << endl
+			<< "[1]	Добавить новый элемент" << endl
+			<< "[2]	Добавить новый элемент по индексу" << endl
+			<< "[3]	Удалить элемент" << endl
+			<< "[4]	Удалить элемент по индексу" << endl
+			<< "[5]	Удалить элемент по значению" << endl
+			<< "[6]	Узнать размер массива" << endl
+			<< "[7]	Узнать ёмкость массива" << endl
+			<< "[8]	Очистка массива" << endl
+			<< "[9]	Проверить массив на пустоту" << endl
+			<< "[10]	Узнать наличие заданного значения" << endl
+			<< "[11]	Считать значение по индексу" << endl
+			<< "[12]	Изменить значение по индексу" << endl
+			<< "[13]	Получить позицию в массиве с заданным значением" << endl
+			<< "[14]	Запрос прямого итератора" << endl
+			<< "[15]	Запрос обратного итератора" << endl
+			<< "[16]	Запрос неустановленного прямого итератора" << endl
+			<< "[17]	Запрос неустановленного обратного итератора" << endl
+			<< "[18]	Вывести статистику" << endl
+			<< "[19]	Вывести массив" << endl
+			<< "[20]	Iterator == rIterator" << endl
+			<< "[21]	Iterator == end()" << endl
+			<< "[22]	rIterator == rend()" << endl
 			<< "[0]	Выход" << endl
 			<< endl << ">>> ";
 	}
@@ -73,65 +73,8 @@ public:
 
 			try {
 				switch (input) {
+
 				case 1: {
-					cout << ">>> Размер массива: " << DA.get_size() << endl;
-					system("pause");
-					break;
-				}
-
-				case 2: {
-					DA.clear();
-					cout << ">>> Массив очищен!" << endl;
-					system("pause");
-					break;
-				}
-
-				case 3: {
-					cout << "Результат: " << DA.isEmpty() << endl;
-					system("pause");
-					break;
-				}
-
-				case 4: {
-					selectType buf;
-					cout << ">>> Введите значение: ";
-					cin >> buf;
-					cout << ">>> Результат: " << DA.check_obj(buf) << endl;
-					system("pause");
-					break;
-				}
-
-				case 5: {
-					int index;
-					cout << ">>> Введите индекс: ";
-					cin >> index;
-					cout << ">>> Значение: " << DA.get_obj(index) << endl;
-					system("pause");
-					break;
-				}
-
-				case 6: {
-					selectType buf;
-					int index;
-					cout << "Введите индекс: ";
-					cin >> index;
-					cout << "Новое значение: ";
-					cin >> buf;
-					cout << endl << "Результат: " << DA.edit_obj(buf, index) << endl;
-					system("pause");
-					break;
-				}
-
-				case 7: {
-					selectType buf;
-					cout << "Введите значение: ";
-					cin >> buf;
-					cout << "Индекс в массиве: " << DA.get_index_obj(buf) << endl;
-					system("pause");
-					break;
-				}
-
-				case 8: {
 					selectType buf;
 					cout << ">>> Введите новое значение: ";
 					cin >> buf;
@@ -140,69 +83,142 @@ public:
 					break;
 				}
 
-				case 9: {
+				case 2: {
 					selectType buf;
 					int index;
 					cout << ">>> Введите новое значение: ";
 					cin >> buf;
 					cout << ">>> Введите индекс: ";
 					cin >> index;
-					cout << endl << DA.push(buf, index) << endl;
+					cout << ">>> Результат операции: " << DA.push(buf, index) << endl;
+					system("pause");
+					break;
+				}
+
+				case 3: {
+					DA.remove();
+					cout << ">>> Удаление успешно!" << endl;
+					system("pause");
+					break;
+				}
+
+				case 4: {
+					int index;
+					cout << ">>> Удаление" << endl << ">>> Введите индекс: ";
+					cin >> index;
+					cout << ">>> Результат операции: " << DA.remove(index) << endl;
+					system("pause");
+					break;
+				}
+
+				case 5: {
+					selectType obj;
+					cout << ">>> Удаление" << endl << ">>> Введите значение: ";
+					cin >> obj;
+					cout << ">>> Результат операции: " << DA.remove_by_obj(obj) << endl;
+					system("pause");
+					break;
+				}
+
+				case 6: {
+					cout << ">>> Размер массива: " << DA.get_size() << endl;
+					system("pause");
+					break;
+				}
+
+				case 7: {
+					cout << ">>> Ёмкость массива: " << DA.get_capacity() << endl;
+					system("pause");
+					break;
+				}
+
+				case 8: {
+					DA.clear();
+					cout << ">>> Массив очищен!" << endl;
+					system("pause");
+					break;
+				}
+
+				case 9: {
+					cout << "Результат операции: " << DA.isEmpty() << endl;
 					system("pause");
 					break;
 				}
 
 				case 10: {
-					DA.pop();
-					cout << ">>> Удаление успешно!" << endl;
+					selectType buf;
+					cout << ">>> Введите значение: ";
+					cin >> buf;
+					cout << ">>> Результат операции: " << DA.check_obj(buf) << endl;
 					system("pause");
 					break;
 				}
 
 				case 11: {
 					int index;
-					cout << ">>> Удаление" << endl << ">>> Введите индекс: ";
+					cout << ">>> Введите индекс: ";
 					cin >> index;
-					cout << endl << DA.pop(index) << endl;
+					cout << ">>> Значение: " << DA.get_obj(index) << endl;
 					system("pause");
 					break;
 				}
 
 				case 12: {
+					selectType buf;
+					int index;
+					cout << "Введите индекс: ";
+					cin >> index;
+					cout << "Новое значение: ";
+					cin >> buf;
+					cout << ">>> Результат операции: " << DA.edit_obj(buf, index) << endl;
+					system("pause");
+					break;
+				}
+
+				case 13: {
+					selectType buf;
+					cout << "Введите значение: ";
+					cin >> buf;
+					cout << ">>> Индекс в массиве: " << DA.get_index_obj(buf) << endl;
+					system("pause");
+					break;
+				}
+
+				case 14: {
 					iter = DA.begin();
 					Menu::iteratorMenu(&DA, &iter);
 					system("pause");
 					break;
 				}
 
-				case 13: {
+				case 15: {
 					riter = DA.rbegin();
 					Menu::riteratorMenu(&DA, &riter);
 					system("pause");
 					break;
 				}
 
-				case 14: {
+				case 16: {
 					iter = DA.end();
 					Menu::iteratorMenu(&DA, &iter);
 					system("pause");
 					break;
 				}
 
-				case 15: {
+				case 17: {
 					riter = DA.rend();
 					Menu::riteratorMenu(&DA, &riter);
 					system("pause");
 					break;
 				}
 
-				case 16: {
+				case 18: {
 					DA.print_stat();
 					system("pause");
 					break;
 				}
 
-				case 17: {
+				case 19: {
 					cout << ">>> Массив элементов: ";
 					if (DA.get_size() == 0)
 						cout << "Пуст";
@@ -213,35 +229,20 @@ public:
 					break;
 				}
 
-				case 18: {
-					cout << ">>> Результат: " << ((*iter) == (*riter)) << endl;
-					system("pause");
-					break;
-				}
-
-				case 19: {
-					cout << ">>> Результат: " << (iter == DA.end()) << endl;
-					system("pause");
-					break;
-				}
-
 				case 20: {
-					cout << ">>> Результат: " << (riter == DA.rend()) << endl;
+					cout << ">>> Результат операции: " << ((*iter) == (*riter)) << endl;
 					system("pause");
 					break;
 				}
 
 				case 21: {
-					cout << ">>> Ёмкость массива: " << DA.get_capacity() << endl;
+					cout << ">>> Результат операции: " << (iter == DA.end()) << endl;
 					system("pause");
 					break;
 				}
 
 				case 22: {
-					selectType obj;
-					cout << ">>> Удаление" << endl << ">>> Введите значение: ";
-					cin >> obj;
-					cout << endl << "Результат: " << DA.pop_by_obj(obj) << endl;
+					cout << ">>> Результат операции: " << (riter == DA.rend()) << endl;
 					system("pause");
 					break;
 				}

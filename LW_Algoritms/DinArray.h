@@ -13,7 +13,7 @@ private:
 	int size;							//текущий размер
 	int match_count;					//счётчик количества совпадений при использовании поиска по объекту
 	int push_by_index_count;			//счётчик количества добавлений элемента с использованием индекса
-	int pop_by_index_count;				//счётчик количества удалений элемента с использованием индекса
+	int remove_by_index_count;			//счётчик количества удалений элемента с использованием индекса
 
 public:
 	DinArray();
@@ -22,9 +22,9 @@ public:
 	~DinArray();
 	void push(Data obj);
 	bool push(Data obj, int index);
-	void pop();
-	bool pop(int index);
-	bool pop_by_obj(Data obj);
+	void remove();
+	bool remove(int index);
+	bool remove_by_obj(Data obj);
 	void print();
 	void print_stat();
 	int get_capacity();
@@ -100,13 +100,13 @@ public:
 };
 
 template <class Data>
-DinArray<Data>::DinArray() : n0(10), size(0), match_count(0), push_by_index_count(0), pop_by_index_count(0) {
+DinArray<Data>::DinArray() : n0(10), size(0), match_count(0), push_by_index_count(0), remove_by_index_count(0) {
 	capacity = n0;
 	Array = new Data[capacity];
 }
 
 template <class Data>
-DinArray<Data>::DinArray(int _n0) : n0(_n0), size(0), match_count(0), push_by_index_count(0), pop_by_index_count(0) {
+DinArray<Data>::DinArray(int _n0) : n0(_n0), size(0), match_count(0), push_by_index_count(0), remove_by_index_count(0) {
 	n0 = _n0;
 	size = 0;
 	capacity = n0;
@@ -120,7 +120,7 @@ DinArray<Data>::DinArray(DinArray<Data>& DA) {
 	capacity = DA.capacity;
 	match_count = DA.match_count;
 	push_by_index_count = DA.push_by_index_count;
-	pop_by_index_count = DA.pop_by_index_count;
+	remove_by_index_count = DA.remove_by_index_count;
 	Array = new Data[capacity];
 	for (int i = 0; DA.size; i++)
 		Array[i] = DA.Array[i];
@@ -135,7 +135,7 @@ DinArray<Data>::~DinArray() {
 	capacity = 0;
 	match_count = 0;
 	push_by_index_count = 0;
-	pop_by_index_count = 0;
+	remove_by_index_count = 0;
 }
 
 template <class Data>
@@ -196,7 +196,7 @@ bool DinArray<Data>::push(Data obj, int index) {
 }
 
 template <class Data>
-void DinArray<Data>::pop() {
+void DinArray<Data>::remove() {
 	if (size == 0)
 		throw ArrayDelErr();
 
@@ -208,14 +208,14 @@ void DinArray<Data>::pop() {
 }
 
 template <class Data>
-bool DinArray<Data>::pop(int index) {
+bool DinArray<Data>::remove(int index) {
 	if (size == 0 || index >= size || index < 0)
 		return false;
 
 	for (int i = index; i < size; i++)
 		Array[i] = Array[i + 1];
 	Array[size--] = NULL;
-	pop_by_index_count++;
+	remove_by_index_count++;
 
 	if ((capacity / 2) >= size) {
 		capacity_decrease();
@@ -224,7 +224,7 @@ bool DinArray<Data>::pop(int index) {
 }
 
 template <class Data>
-bool DinArray<Data>::pop_by_obj(Data obj) {
+bool DinArray<Data>::remove_by_obj(Data obj) {
 	if (size == 0)
 		return false;
 
@@ -272,7 +272,7 @@ bool DinArray<Data>::check_obj(Data obj) {
 template <class Data>
 Data DinArray<Data>::get_obj(int index) {
 	if (index >= size || index < 0)
-		throw ArrayRangedErr(size - 1, index);
+		throw ArrayRangedErr();
 
 	return Array[index];
 }
@@ -307,7 +307,7 @@ void DinArray<Data>::print_stat() {
 	cout << endl << "Статистика:" << endl;
 	cout << "Количество просмотренных элементов: " << match_count << endl;
 	cout << "Количество добавленных элементов по индексу: " << push_by_index_count << endl;
-	cout << "Количество удалённых элементов по индексу: " << pop_by_index_count << endl;
+	cout << "Количество удалённых элементов по индексу: " << remove_by_index_count << endl;
 }
 
 template <class Data>
@@ -362,12 +362,10 @@ typename Data DinArray<Data>::Iterator::get_data() {
 
 template <class Data>
 typename DinArray<Data>::Iterator& DinArray<Data>::Iterator::operator++() {
-	if (obj == nullptr)
-		throw IteratorInactive();
-
 	++cur;
 	if (cur >= mass->get_size()) {
 		obj = nullptr;
+		cur = -1;
 		return *this;
 	}
 
@@ -377,12 +375,10 @@ typename DinArray<Data>::Iterator& DinArray<Data>::Iterator::operator++() {
 
 template <class Data>
 typename DinArray<Data>::Iterator& DinArray<Data>::Iterator::operator--() {
-	if (obj == nullptr)
-		throw IteratorInactive();
-
 	--cur;
 	if (cur < 0) {
 		obj = nullptr;
+		cur = -1;
 		return *this;
 	}
 
@@ -407,8 +403,10 @@ DinArray<Data>::rIterator::rIterator(DinArray<Data>* _mass, int _cur) {
 	mass = _mass;
 	cur = _cur;
 
-	if (cur <= -1)
+	if (cur <= -1) {
 		obj = nullptr;
+		cur = -1;
+	}
 	else
 		obj = mass->get_Array() + cur;
 }
@@ -427,12 +425,10 @@ typename Data DinArray<Data>::rIterator::get_data() {
 
 template <class Data>
 typename DinArray<Data>::rIterator& DinArray<Data>::rIterator::operator++() {
-	if (obj == nullptr)
-		throw IteratorInactive();
-
 	--cur;
 	if (cur < 0) {
 		obj = nullptr;
+		cur = -1;
 		return *this;
 	}
 
@@ -442,12 +438,10 @@ typename DinArray<Data>::rIterator& DinArray<Data>::rIterator::operator++() {
 
 template <class Data>
 typename DinArray<Data>::rIterator& DinArray<Data>::rIterator::operator--() {
-	if (obj == nullptr)
-		throw IteratorInactive();
-
 	++cur;
 	if (cur >= mass->get_size()) {
 		obj = nullptr;
+		cur = -1;
 		return *this;
 	}
 
