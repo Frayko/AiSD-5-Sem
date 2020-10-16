@@ -26,6 +26,7 @@ private:
 	bool insert(Key key, Data data, Node* parent, Node* cur);
 	Node* getNode(Key key, Node* cur);
 	bool remove(Key key, Node* cur);
+	Node* del(Node* t, Node* t0);
 
 public:
 	Tree();
@@ -186,6 +187,21 @@ bool Tree<Key, Data>::remove(Key key, Node* node) {
 }
 
 template <class Key, class Data>
+typename Tree<Key, Data>::Node* Tree<Key, Data>::del(Node* t, Node* t0) {
+	if (t->left) {
+		t->left = del(t->left, t0);
+		return t;
+	}
+
+	t0->key = t->key;
+	t0->data = t->data;
+
+	Node* x = t->right;
+	delete getNode(t->key);
+	return x;
+}
+
+template <class Key, class Data>
 typename Tree<Key, Data>::Node* Tree<Key, Data>::getNode(Key key) {
 	if (!root)
 		return nullptr;
@@ -250,6 +266,10 @@ typename Tree<Key, Data>::Node* Tree<Key, Data>::max(Node* node) {
 	if (node->right)
 		node = max(node->right);
 	return node;
+}
+
+template <class Key, class Data>
+int Tree<Key, Data>::getSerialNumber(Key key) {
 }
 
 //--------------------------------------------//
