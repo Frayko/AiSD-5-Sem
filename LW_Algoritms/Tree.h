@@ -25,8 +25,10 @@ private:
 	void clear(Node* node);
 	bool insert(Key key, Data data, Node* parent, Node* cur);
 	Node* getNode(Key key, Node* cur);
-	bool remove(Key key, Node* cur);
+	bool remove(Key key, Node* parent, Node* cur);
 	Node* del(Node* t, Node* t0);
+	void print(Node* node, int lvl);
+	void printKeys(Node* node);
 
 public:
 	Tree();
@@ -44,6 +46,7 @@ public:
 	Node* min(Node* node);
 	Node* max(Node* node);
 	void print();
+	void printKeys();
 	int getSerialNumber(Key key);
 
 	class Iterator {
@@ -123,37 +126,22 @@ bool Tree<Key, Data>::isEmpty() {
 
 template <class Key, class Data>
 bool Tree<Key, Data>::insert(Key key, Data data) {
-	if (!root)
-		root = new Node(key, data);
-	else {
-		if (key < root->key) {
-			if (insert(key, data, root, root->left))
-				root->countSubNode++;
-			else
-				return false;
-		}
-		else if (key > root->key) {
-			if (insert(key, data, root, root->right))
-				root->countSubNode++;
-			else
-				return false;
-		}
-		else
-			return false;
+	if (insert(key, data, nullptr, root)) {
+		this->size++;
+		return true;
 	}
-
-	this->size++;
-	return true;
+	else
+		return false;
 }
 
 template <class Key, class Data>
 bool Tree<Key, Data>::insert(Key key, Data data, Tree<Key, Data>::Node* parent, Tree<Key, Data>::Node* cur) {
-	if (!cur) {
+	if (!cur && parent == nullptr)
+		root = new Node(key, data);
+
+	else if (!cur) {
 		cur = new Node(key, data);
-		if (key < parent->key)
-			parent->left = cur;
-		else
-			parent->right = cur;
+		key < parent->key ? parent->left = cur : parent->right = cur;
 	}
 
 	else {
@@ -178,11 +166,16 @@ bool Tree<Key, Data>::insert(Key key, Data data, Tree<Key, Data>::Node* parent, 
 
 template <class Key, class Data>
 bool Tree<Key, Data>::remove(Key key) {
-
+	if (remove(key, nullptr, root)) {
+		this->size--;
+		return true;
+	}
+	esle
+		return false;
 }
 
 template <class Key, class Data>
-bool Tree<Key, Data>::remove(Key key, Node* node) {
+bool Tree<Key, Data>::remove(Key key, Node* parent, Node* node) {
 
 }
 
@@ -203,18 +196,7 @@ typename Tree<Key, Data>::Node* Tree<Key, Data>::del(Node* t, Node* t0) {
 
 template <class Key, class Data>
 typename Tree<Key, Data>::Node* Tree<Key, Data>::getNode(Key key) {
-	if (!root)
-		return nullptr;
-	Node* node = nullptr;
-
-	if (key == root->key)
-		node = root;
-	else if (key < root->key)
-		node = getNode(key, root->left);
-	else
-		node = getNode(key, root->right);
-
-	return node;
+	return getNode(key, root);
 }
 
 template <class Key, class Data>
@@ -270,6 +252,79 @@ typename Tree<Key, Data>::Node* Tree<Key, Data>::max(Node* node) {
 
 template <class Key, class Data>
 int Tree<Key, Data>::getSerialNumber(Key key) {
+	if (!root)
+		return -1;
+
+	if (key == root->key)
+		return root->left ? root->left->countSubNode : 0;
+
+	int ans = 0;
+	Node* node = root;
+	
+	while (node) {
+		if (key == node->key) {
+			return node->left ? ans + node->left->countSubNode : ans;
+		}
+		else if (key < node->key) {
+			if (node->left)
+				node = node->left;
+			else
+				return -1;
+		}
+		else {
+			if (node->right) {
+				if (node->left) {
+					ans += node->left->countSubNode + 1;
+					node = node->right;
+				}
+				else {
+					ans += 1;
+					node = node->right;
+				}
+
+			}
+			else
+				return -1;
+		}
+	}
+
+	return -1;
+}
+
+template <class Key, class Data>
+void Tree<Key, Data>::print() {
+	print(root, 0);
+}
+
+template <class Key, class Data>
+void Tree<Key, Data>::print(Node* node, int lvl) {
+	if (!node)
+		return;
+
+	if (node->right)
+		print(node->right, lvl + 1);
+	for (int i = 0; i < lvl; i++)
+		cout << "	";
+	cout << node->key << endl;
+	if (node->left)
+		print(node->left, lvl + 1);
+}
+
+template <class Key, class Data>
+void Tree<Key, Data>::printKeys() {
+	printKeys(root);
+}
+
+template <class Key, class Data>
+void Tree<Key, Data>::printKeys(Node* node) {
+	if (!node)
+		return;
+
+	cout << node->key << " ";
+	if (node->left)
+		printKeys(node->left);
+	if (node->right)
+		printKeys(node->right);
 }
 
 //--------------------------------------------//
