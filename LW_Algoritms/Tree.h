@@ -130,8 +130,9 @@ bool Tree<Key, Data>::insert(Key key, Data data) {
 		this->size++;
 		return true;
 	}
-	else
+	else {
 		return false;
+	}
 }
 
 template <class Key, class Data>
@@ -170,13 +171,15 @@ bool Tree<Key, Data>::remove(Key key) {
 		this->size--;
 		return true;
 	}
-	esle
+	else {
 		return false;
+	}
 }
 
 template <class Key, class Data>
 bool Tree<Key, Data>::remove(Key key, Node* parent, Node* node) {
 
+	return true;
 }
 
 template <class Key, class Data>
