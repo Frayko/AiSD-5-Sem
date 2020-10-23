@@ -26,7 +26,7 @@ private:
 	bool insert(Key key, Data data, Node* parent, Node* cur);
 	Node* getNode(Key key, Node* cur);
 	bool remove(Key key, Node* parent, Node* cur);
-	Node* del(Node* t, Node* t0);
+	Node* maxWithDel(Node* parent, Node* cur);
 	void print(Node* node, int lvl);
 	void printKeys(Node* node);
 
@@ -39,7 +39,7 @@ public:
 	int getSize();
 	bool isEmpty();
 	bool insert(Key key, Data data);
-	bool remove(Key key);
+	bool remove(Key key);					//TODO:: fix countSubNode after remove
 	Node* getNode(Key key);
 	Data find(Key key);
 	bool set(Key key, Data data);
@@ -126,13 +126,11 @@ bool Tree<Key, Data>::isEmpty() {
 
 template <class Key, class Data>
 bool Tree<Key, Data>::insert(Key key, Data data) {
-	if (insert(key, data, nullptr, root)) {
-		this->size++;
-		return true;
-	}
-	else {
+	if (!insert(key, data, nullptr, root))
 		return false;
-	}
+
+	this->size++;
+	return true;
 }
 
 template <class Key, class Data>
@@ -167,34 +165,115 @@ bool Tree<Key, Data>::insert(Key key, Data data, Tree<Key, Data>::Node* parent, 
 
 template <class Key, class Data>
 bool Tree<Key, Data>::remove(Key key) {
-	if (remove(key, nullptr, root)) {
-		this->size--;
-		return true;
+	if (!root)
+		return false;
+
+	if (key == root->key && !root->left && !root->right) {
+		delete root;
+		root = nullptr;
 	}
-	else {
+	else if (!remove(key, nullptr, root)) {
 		return false;
 	}
+
+	this->size--;
+	return true;
 }
 
 template <class Key, class Data>
-bool Tree<Key, Data>::remove(Key key, Node* parent, Node* node) {
+bool Tree<Key, Data>::remove(Key key, Node* parent, Node* cur) {
+	if (!cur)
+		return false;
+
+	if (key == cur->key && !parent) {
+		if (root->left) {
+			if (root->left->right) {
+				Node* node = maxWithDel(root->left, root->left->right);
+				node->right = root->right;
+				node->left = root->left;
+
+				delete root;
+				root = node;
+			}
+			else {
+				root->left->right = root->right;
+
+				Node* node = root->left;
+
+				delete root;
+				root = node;
+			}
+		}
+		else {
+			Node* node = root->right;
+			delete root;
+			root = node;
+		}
+	}
+	else {
+		if (key == cur->key) {
+			if (cur->left) {
+				if (cur->left->right) {
+					Node* node = maxWithDel(cur->left, cur->left->right);
+					node->right = cur->right;
+					node->left = cur->left;
+
+					if (parent->left == cur)
+						parent->left = node;
+					else
+						parent->right = node;
+					delete cur;
+				}
+				else {
+					cur->left->right = cur->right;
+
+					if (parent->left == cur)
+						parent->left = cur->left;
+					else
+						parent->right = cur->left;
+					delete cur;
+				}
+			}
+			else {
+				if (parent->left == cur)
+					parent->left = cur->right;
+				else
+					parent->right = cur->right;
+				delete cur;
+			}
+		}
+		else if (key < cur->key) {
+			if (!remove(key, cur, cur->left))
+				return false;
+		}
+		else {
+			if (!remove(key, cur, cur->right))
+				return false;
+		}
+	}
 
 	return true;
 }
 
 template <class Key, class Data>
-typename Tree<Key, Data>::Node* Tree<Key, Data>::del(Node* t, Node* t0) {
-	if (t->left) {
-		t->left = del(t->left, t0);
-		return t;
+typename Tree<Key, Data>::Node* Tree<Key, Data>::maxWithDel(Node* parent, Node* cur) {
+	if (!cur)
+		return nullptr;
+
+	while (cur->right) {
+		parent = cur;
+		cur = cur->right;
 	}
 
-	t0->key = t->key;
-	t0->data = t->data;
+	if (cur->left) {
+		parent->right = cur->left;
+		cur->left = nullptr;
+	}
+	else {
+		parent->right = nullptr;
+	}
 
-	Node* x = t->right;
-	delete getNode(t->key);
-	return x;
+	return cur;
 }
 
 template <class Key, class Data>
