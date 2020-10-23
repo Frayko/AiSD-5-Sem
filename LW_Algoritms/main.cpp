@@ -13,7 +13,6 @@ int main() {
 	cout << test.insert(60, 11);
 	cout << test.insert(40, 9);
 	cout << test.insert(50, 6);
-	cout << test.insert(45, 7);
 	cout << test.insert(20, 14);
 	cout << test.insert(30, 7);
 	cout << test.insert(10, 2);
@@ -23,38 +22,19 @@ int main() {
 
 	cout << endl << endl;
 
-	test.print();
-
-	cout << endl << endl;
-
-	cout << test.remove(60);
-	cout << test.remove(40);
-	cout << test.remove(22);
-	cout << test.remove(45);
-	cout << test.remove(70);
-	cout << test.remove(90);
-	cout << test.remove(20);
-	cout << test.remove(30);
-	cout << test.remove(80);
-	cout << test.remove(50);
-	//cout << test.remove(10);
-
+	cout << test.find(80) << endl;
+	cout << test.set(117, 22) << endl;
+	cout << test.set(40, 3) << endl << endl;
+	cout << test.getSerialNumber(60) << endl;
+	cout << test.getSerialNumber(40) << endl;
+	cout << test.getSerialNumber(10) << endl;
+	cout << test.getSerialNumber(90) << endl;
+	cout << test.getSerialNumber(0) << endl;
+	cout << test.getSerialNumber(100) << endl;
+	cout << test.getSerialNumber(61) << endl << endl;
+	test.printKeys();
 	cout << endl << endl;
 	test.print();
-
-	//cout << test.find(80) << endl;
-	//cout << test.set(117, 22) << endl;
-	//cout << test.set(40, 3) << endl << endl;
-	//cout << test.getSerialNumber(60) << endl;
-	//cout << test.getSerialNumber(40) << endl;
-	//cout << test.getSerialNumber(10) << endl;
-	//cout << test.getSerialNumber(90) << endl;
-	//cout << test.getSerialNumber(0) << endl;
-	//cout << test.getSerialNumber(100) << endl;
-	//cout << test.getSerialNumber(61) << endl << endl;
-	//test.printKeys();
-	//cout << endl << endl;
-	//test.print();
 	//Menu::startMenu();
 
 	}
