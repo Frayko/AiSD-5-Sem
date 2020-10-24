@@ -48,6 +48,6 @@ class IteratorInactive : public IteratorError {
 public:
 	IteratorInactive() {}
 	void ErrMsg() const {
-		cerr << ">>> Ошибка при работе с итератором!" << endl;
+		cerr << ">>> Ошибка при работе с итератором! Итератор стоит в режиме 'неустановленный'" << endl;
 	}
 };

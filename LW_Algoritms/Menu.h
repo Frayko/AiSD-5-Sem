@@ -1,399 +1,381 @@
-//#pragma once
-//#include <iostream>
-//#include "Tree.h"
-//#include "listErrors.h"
-//
-//using namespace std;
-//
-//typedef int selectType;
-//
-//class Menu {
-//public:
-//	static void printMainMenu() {
-//		cout << "Меню программы:" << endl
-//			<< "[1]	Узнать размер дерева" << endl
-//			<< "[2]	Очистка дерева" << endl
-//			<< "[3]	Проверить дерево на пустоту" << endl
-//			<< "[5]	Прочитать значение по ключу" << endl
-//			<< "[6]	Изменить значение по ключу" << endl
-//			<< "[7]	Получить позицию в массиве с заданным значением" << endl
-//			<< "[8]	Добавить новый элемент" << endl
-//			<< "[9]	Добавить новый элемент по индексу" << endl
-//			<< "[10]	Удалить элемент" << endl
-//			<< "[11]	Удалить элемент по индексу" << endl
-//			<< "[12]	Запрос прямого итератора" << endl
-//			<< "[13]	Запрос обратного итератора" << endl
-//			<< "[14]	Запрос неустановленного прямого итератора" << endl
-//			<< "[15]	Запрос неустановленного обратного итератора" << endl
-//			<< "[16]	Вывести статистику по индексам" << endl
-//			<< "[17]	Вывести массив" << endl
-//			<< "[18]	Iterator == rIterator" << endl
-//			<< "[19]	Iterator == end()" << endl
-//			<< "[20]	rIterator == rend()" << endl
-//			<< "[0]	Выход" << endl
-//			<< endl << ">>> ";
-//	}
-//	static void printIteratorMenu(bool l) {
-//		if (l == true)
-//			cout << "Меню прямого итератора:" << endl;
-//		else
-//			cout << "Меню обратного итератора:" << endl;
-//
-//		cout << "[1] Следующий" << endl
-//			<< "[2] Предыдущий" << endl
-//			<< "[3] Получить текущее значение" << endl
-//			<< "[4] Изменить текущее значение" << endl
-//			<< "[5] В начало" << endl
-//			<< "[6] В конец" << endl
-//			<< "[0] Выход" << endl
-//			<< endl << ">>> ";
-//	}
-//
-//	static void startMenu(DinArray<>& DA) {
-//		DinArray<>::Iterator iter = DA.end();
-//		DinArray<>::rIterator riter = DA.rend();
-//
-//		int input;
-//		bool exit = false;
-//		while (!exit) {
-//			system("cls");
-//
-//			cout << "Массив элементов: ";
-//			if (DA.get_size() == 0)
-//				cout << "Пуст";
-//			else
-//				DA.print();
-//
-//			cout << endl << "Размер массива: " << DA.get_size() << endl << endl;
-//			printMainMenu();
-//			cin >> input;
-//
-//			try {
-//				switch (input) {
-//				case 1: {
-//					cout << ">>> Размер массива: " << DA.get_size() << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 2: {
-//					DA.clear();
-//					cout << ">>> Массив очищен!" << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 3: {
-//					if (DA.isEmpty())
-//						cout << ">>> Массив пуст!" << endl;
-//					else
-//						cout << ">>> Массив не пуст!" << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 4: {
-//					selectType buf;
-//					cout << ">>> Введите значение: ";
-//					cin >> buf;
-//					cout << ">>> Результат: " << DA.check_obj(buf) << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 5: {
-//					int index;
-//					cout << ">>> Введите индекс: ";
-//					cin >> index;
-//					cout << ">>> Значение: " << DA.get_obj(index) << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 6: {
-//					selectType buf;
-//					int index;
-//					cout << "Введите индекс: ";
-//					cin >> index;
-//					cout << ">>> Текущее значение: " << DA.get_obj(index) << endl << "Новое значение: ";
-//					cin >> buf;
-//					cout << endl << DA.edit_obj(buf, index);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 7: {
-//					selectType buf;
-//					cout << "Введите значение: ";
-//					cin >> buf;
-//					cout << "Индекс в массиве: " << DA.get_index_obj(buf) << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 8: {
-//					selectType buf;
-//					cout << ">>> Введите новое значение: ";
-//					cin >> buf;
-//					DA.push(buf);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 9: {
-//					selectType buf;
-//					int index;
-//					cout << ">>> Введите новое значение: ";
-//					cin >> buf;
-//					cout << ">>> Введите индекс: ";
-//					cin >> index;
-//					cout << endl << DA.push(buf, index) << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 10: {
-//					DA.pop();
-//					cout << ">>> Удаление успешно!" << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 11: {
-//					int index;
-//					cout << ">>> Удаление" << endl << ">>> Введите индекс: ";
-//					cin >> index;
-//					cout << endl << DA.pop(index) << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 12: {
-//					iter = DA.begin();
-//					Menu::iteratorMenu(&DA, &iter);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 13: {
-//					riter = DA.rbegin();
-//					Menu::riteratorMenu(&DA, &riter);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 14: {
-//					iter = DA.end();
-//					Menu::iteratorMenu(&DA, &iter);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 15: {
-//					riter = DA.rend();
-//					Menu::riteratorMenu(&DA, &riter);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 16: {
-//					DA.print_stat();
-//					system("pause");
-//					break;
-//				}
-//
-//				case 17: {
-//					cout << ">>> Массив элементов: ";
-//					if (DA.get_size() == 0)
-//						cout << "Пуст";
-//					else
-//						DA.print();
-//					cout << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 18: {
-//					cout << ">>> Результат: " << ((*iter) == (*riter)) << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 19: {
-//					cout << ">>> Результат: " << (iter == DA.end()) << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 20: {
-//					cout << ">>> Результат: " << (riter == DA.rend()) << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 0: { exit = true; break; }
-//				default: {
-//					cout << ">>> Ошибка ввода!\n>>> ";
-//					system("pause");
-//					break;
-//				}
-//				}
-//			}
-//
-//			catch (ArrayError& err) {
-//				err.ErrMsg();
-//				system("pause");
-//			}
-//			catch (IteratorError& err) {
-//				err.ErrMsg();
-//				system("pause");
-//			}
-//			catch (...) {
-//				cout << ">>> Непредвиденная ошибка в главном меню!" << endl;
-//				system("pause");
-//			}
-//		}
-//	}
-//
-//	static void iteratorMenu(DinArray<>* DA, DinArray<>::Iterator* iter) {
-//		int input;
-//		bool exit = false;
-//		while (!exit) {
-//			system("cls");
-//
-//			printIteratorMenu(true);
-//			cin >> input;
-//
-//			try {
-//				switch (input) {
-//				case 1: {
-//					++(*iter);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 2: {
-//					--(*iter);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 3: {
-//					cout << "Текущее значение: " << iter->get_data() << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 4: {
-//					selectType buf;
-//					cout << "Текущее значение: " << iter->get_data() << endl;
-//					cout << "Новое значение: ";
-//					cin >> buf;
-//					DA->edit_obj(buf, iter->get_cur());
-//					system("pause");
-//					break;
-//				}
-//
-//				case 5: {
-//					*iter = DA->begin();
-//					system("pause");
-//					break;
-//				}
-//
-//				case 6: {
-//					*iter = DA->end();
-//					system("pause");
-//					break;
-//				}
-//
-//				case 0: { exit = true; break; }
-//				default: {
-//					cout << ">>> Ошибка ввода!\n>>> ";
-//					system("pause");
-//					break;
-//				}
-//				}
-//			}
-//
-//			catch (IteratorError& err) {
-//				err.ErrMsg();
-//				system("pause");
-//			}
-//			catch (...) {
-//				cout << ">>> Непредвиденная ошибка в меню итератора!" << endl;
-//				system("pause");
-//			}
-//		}
-//	}
-//
-//	static void riteratorMenu(DinArray<>* DA, DinArray<>::rIterator* riter) {
-//		int input;
-//		bool exit = false;
-//		while (!exit) {
-//			system("cls");
-//
-//			printIteratorMenu(true);
-//			cin >> input;
-//
-//			try {
-//				switch (input) {
-//				case 1: {
-//					++(*riter);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 2: {
-//					--(*riter);
-//					system("pause");
-//					break;
-//				}
-//
-//				case 3: {
-//					cout << "Текущее значение: " << **riter << endl;
-//					system("pause");
-//					break;
-//				}
-//
-//				case 4: {
-//					selectType buf;
-//					cout << "Текущее значение: " << **riter << endl;
-//					cout << "Новое значение: ";
-//					cin >> buf;
-//					DA->edit_obj(buf, riter->get_cur());
-//					system("pause");
-//					break;
-//				}
-//
-//				case 5: {
-//					*riter = DA->rbegin();
-//					system("pause");
-//					break;
-//				}
-//
-//				case 6: {
-//					*riter = DA->rend();
-//					system("pause");
-//					break;
-//				}
-//
-//				case 0: { exit = true; break; }
-//				default: {
-//					cout << ">>> Ошибка ввода!\n>>> ";
-//					system("pause");
-//					break;
-//				}
-//				}
-//			}
-//
-//			catch (IteratorError& err) {
-//				err.ErrMsg();
-//				system("pause");
-//			}
-//			catch (...) {
-//				cout << ">>> Непредвиденная ошибка в меню итератора!" << endl;
-//				system("pause");
-//			}
-//		}
-//	}
-//};
+#pragma once
+#include <iostream>
+#include "Tree.h"
+#include "listErrors.h"
+
+using namespace std;
+
+typedef int selectKey;
+typedef int selectData;
+
+template <class Key = int, class Data = int>
+class Menu {
+private:
+	static void printMainMenu() {
+		cout << "Меню программы:" << endl
+			<< "[1]	Узнать размер дерева" << endl
+			<< "[2]	Очистить дерево" << endl
+			<< "[3]	Проверить дерево на пустоту" << endl
+			<< "[4]	Прочитать значение по ключу" << endl
+			<< "[5]	Изменить значение по ключу" << endl
+			<< "[6]	Включение данных по ключу" << endl
+			<< "[7]	Удаление данных по ключу" << endl
+			<< "[8]	Формирование списка ключей в дереве в порядке t-L-R" << endl
+			<< "[9]	Определение порядкого номера для элемента по ключу" << endl
+			<< "[10]	Вывод дерева" << endl
+			<< "[11]	Получить прямой итератор в начальной позиции (begin)" << endl
+			<< "[12]	Получить прямой итератор в конечной позиции (end)" << endl
+			<< "[13]	Получить обратный итератор в начальной позиции (begin)" << endl
+			<< "[14]	Получить обратный итератор в конечной позиции (end)" << endl
+			<< "[15]	Iterator == begin()" << endl
+			<< "[16]	Iterator == end()" << endl
+			<< "[17]	rIterator == rbegin()" << endl
+			<< "[18]	rIterator == rend()" << endl
+			<< "[19]	Iterator == rIterator" << endl
+			<< "[20]	Получить значение счётчика" << endl
+			<< "[0]	Выход" << endl
+			<< endl << ">>> ";
+	}
+
+	static void printIteratorMenu(bool l) {
+		if (l == true)
+			cout << "Меню прямого итератора:" << endl;
+		else
+			cout << "Меню обратного итератора:" << endl;
+
+		cout << "[1] Следующий" << endl
+			<< "[2] Предыдущий" << endl
+			<< "[3] Получить текущее значение" << endl
+			<< "[4] Изменить текущее значение" << endl
+			<< "[0] Выход" << endl
+			<< endl << ">>> ";
+	}
+
+	static void iteratorMenu(Tree<Key, Data>& tree, typename Tree<Key, Data>::Iterator& iter) {
+		int input;
+		bool exit = false;
+		while (!exit) {
+			system("cls");
+
+			tree.print(tree.getRoot(), 0, iter);
+
+			printIteratorMenu(true);
+			cin >> input;
+
+			try {
+				switch (input) {
+				case 1: {
+					iter++;
+					system("pause");
+					break;
+				}
+
+				case 2: {
+					iter--;
+					system("pause");
+					break;
+				}
+
+				case 3: {
+					cout << "Текущее значение: " << *iter << endl;
+					system("pause");
+					break;
+				}
+
+				case 4: {
+					selectData data;
+					cout << "Текущие данные: " << *iter << endl;
+					cout << "Новые данные: ";
+					cin >> data;
+					*iter = data;
+					system("pause");
+					break;
+				}
+
+				case 0: { exit = true; break; }
+				default: {
+					cout << ">>> Ошибка ввода!\n>>> ";
+					system("pause");
+					break;
+				}
+				}
+			}
+
+			catch (IteratorError& err) {
+				err.ErrMsg();
+				system("pause");
+			}
+			catch (...) {
+				cout << ">>> Непредвиденная ошибка в меню итератора!" << endl;
+				system("pause");
+			}
+		}
+	}
+
+	static void riteratorMenu(Tree<Key, Data>& tree, typename Tree<Key, Data>::rIterator& riter) {
+		int input;
+		bool exit = false;
+		while (!exit) {
+			system("cls");
+
+			tree.print(tree.getRoot(), 0, riter);
+
+			printIteratorMenu(false);
+			cin >> input;
+
+			try {
+				switch (input) {
+				case 1: {
+					riter++;
+					system("pause");
+					break;
+				}
+
+				case 2: {
+					riter--;
+					system("pause");
+					break;
+				}
+
+				case 3: {
+					cout << "Текущее значение: " << *riter << endl;
+					system("pause");
+					break;
+				}
+
+				case 4: {
+					selectData data;
+					cout << "Текущие данные: " << *riter << endl;
+					cout << "Новые данные: ";
+					cin >> data;
+					*riter = data;
+					system("pause");
+					break;
+				}
+
+				case 0: { exit = true; break; }
+				default: {
+					cout << ">>> Ошибка ввода!\n>>> ";
+					system("pause");
+					break;
+				}
+				}
+			}
+
+			catch (IteratorError& err) {
+				err.ErrMsg();
+				system("pause");
+			}
+			catch (...) {
+				cout << ">>> Непредвиденная ошибка в меню итератора!" << endl;
+				system("pause");
+			}
+		}
+	}
+
+public:
+	static void startMenu(Tree<Key, Data>& tree) {
+		auto iter = tree.begin();
+		auto riter = tree.rbegin();
+
+		int input;
+		bool exit = false;
+		while (!exit) {
+			system("cls");
+
+			cout << "Дерево элементов: " << endl;
+			if (tree.getSize() == 0)
+				cout << "Пусто";
+			else
+				tree.print();
+
+			cout << endl << "Размер дерева: " << tree.getSize() << endl << endl;
+			printMainMenu();
+			cin >> input;
+
+			try {
+				switch (input) {
+				case 1: {
+					cout << "Размер дерева: " << tree.getSize() << endl;
+					system("pause");
+					break;
+				}
+
+				case 2: {
+					tree.clear();
+					cout << "Дерево очищено!" << endl;
+					system("pause");
+					break;
+				}
+
+				case 3: {
+					cout << "Проверка на пустоту" << endl << "Статус операции: " << tree.isEmpty() << endl;
+					system("pause");
+					break;
+				}
+
+				case 4: {
+					selectKey key;
+					cout << "Чтение по ключу" << endl;
+					cout << "Введите ключ: ";
+					cin >> key;
+					Tree<Key, Data>::resetCOUNTER();
+					cout << "Результат: " << tree.find(key) << endl;
+					system("pause");
+					break;
+				}
+
+				case 5: {
+					selectKey key;
+					selectData data;
+					cout << "Изменение по ключу" << endl;
+					cout << "Введите ключ: ";
+					cin >> key;
+					cout << "Введите данные: ";
+					cin >> data;
+					Tree<Key, Data>::resetCOUNTER();
+					cout << "Статус операции: " << tree.set(key, data) << endl;
+					system("pause");
+					break;
+				}
+
+				case 6: {
+					selectKey key;
+					selectData data;
+					cout << "Включение по ключу" << endl;
+					cout << "Введите ключ: ";
+					cin >> key;
+					cout << "Введите данные: ";
+					cin >> data;
+					Tree<Key, Data>::resetCOUNTER();
+					cout << "Статус операции: " << tree.insert(key, data) << endl;
+					system("pause");
+					break;
+				}
+
+				case 7: {
+					selectKey key;
+					cout << "Удаление по ключу" << endl;
+					cout << "Введите ключ: ";
+					cin >> key;
+					Tree<Key, Data>::resetCOUNTER();
+					cout << "Статус операции: " << tree.remove(key) << endl;
+					system("pause");
+					break;
+				}
+
+				case 8: {
+					cout << "Фомирование списка ключей в дереве в порядке t-L-R" << endl;
+					Tree<Key, Data>::resetCOUNTER();
+					cout << "Ключи, через пробел: "; tree.printKeys(); cout << endl;
+					system("pause");
+					break;
+				}
+
+				case 9: {
+					selectKey key;
+					cout << "Определение порядкого номера по ключу (начиная с нуля, если результат -1 -> заданного ключа нет)" << endl;
+					cout << "Введите ключ: ";
+					cin >> key;
+					cout << "Результат: " << tree.getSerialNumber(key) << endl;
+					system("pause");
+					break;
+				}
+
+				case 10: {
+					cout << "Вывод дерева" << endl;
+					tree.print();
+					cout << endl;
+					system("pause");
+					break;
+				}
+
+				case 11: {
+					iter = tree.begin();
+					Menu::iteratorMenu(tree, iter);
+					break;
+				}
+
+				case 12: {
+					iter = tree.end();
+					Menu::iteratorMenu(tree, iter);
+					break;
+				}
+
+				case 13: {
+					riter = tree.rbegin();
+					Menu::riteratorMenu(tree, riter);
+					break;
+				}
+
+				case 14: {
+					riter = tree.rend();
+					Menu::riteratorMenu(tree, riter);
+					break;
+				}
+
+				case 15: {
+					cout << "Iterator == begin()" << endl;
+					cout << "Результат: " << (iter == tree.begin()) << endl;
+					system("pause");
+					break;
+				}
+
+				case 16: {
+					cout << "Iterator == end()" << endl;
+					cout << "Результат: " << (iter == tree.end()) << endl;
+					system("pause");
+					break;
+				}
+
+				case 17: {
+					cout << "rIterator == rbegin()" << endl;
+					cout << "Результат: " << (riter == tree.rbegin()) << endl;
+					system("pause");
+					break;
+				}
+
+				case 18: {
+					cout << "rIterator == rend()" << endl;
+					cout << "Результат: " << (riter == tree.rend()) << endl;
+					system("pause");
+					break;
+				}
+
+				case 19: {
+					cout << "Iterator == rIterator" << endl;
+					cout << "Результат: " << (*iter == *riter) << endl;
+					system("pause");
+					break;
+				}
+
+				case 20: {
+					cout << "Значение счётчика: " << tree.getCOUNTER() << endl;
+					system("pause");
+					break;
+				}
+
+				case 0: { exit = true; break; }
+				default: {
+					cout << ">>> Ошибка ввода!\n>>> ";
+					system("pause");
+					break;
+				}
+				}
+			}
+
+			catch (TreeError& err) {
+				err.ErrMsg();
+				system("pause");
+			}
+			catch (IteratorError& err) {
+				err.ErrMsg();
+				system("pause");
+			}
+			catch (...) {
+				cout << ">>> Непредвиденная ошибка в главном меню!" << endl;
+				system("pause");
+			}
+		}
+	}
+};
