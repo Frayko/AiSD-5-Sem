@@ -377,6 +377,7 @@ typename Tree<Key, Data>::Node* Tree<Key, Data>::getNode(Key key, Node* node) {
 template <class Key, class Data>
 Data Tree<Key, Data>::find(Key key) {
 	Node* node = getNode(key);
+	
 	if (!node)
 		throw TreeFindErr();
 
@@ -469,48 +470,54 @@ typename Tree<Key, Data>::Node* Tree<Key, Data>::getRoot() {
 
 template <class Key, class Data>
 void Tree<Key, Data>::print(Node* node, int lvl) {
-	if (!node)
+	if (!node) {
+		for (int i = 0; i < lvl; i++)
+			cout << "	";
+		cout << "*" << endl;
 		return;
+	}
 
-	if (node->right)
-		print(node->right, lvl + 1);
+	print(node->right, lvl + 1);
 	for (int i = 0; i < lvl; i++)
 		cout << "	";
 	cout << node->key << "(" << node->data << ")" << endl;
-	if (node->left)
-		print(node->left, lvl + 1);
+	print(node->left, lvl + 1);
 }
 
 template <class Key, class Data>
 void Tree<Key, Data>::print(Node* node, int lvl, Iterator& iter) {
-	if (!node)
+	if (!node) {
+		for (int i = 0; i < lvl; i++)
+			cout << "	";
+		cout << "*" << endl;
 		return;
+	}
 
-	if (node->right)
-		print(node->right, lvl + 1, iter);
+	print(node->right, lvl + 1, iter);
 	for (int i = 0; i < lvl; i++)
 		cout << "	";
 	if (iter != end() && iter == node)
-		cout << "*";
+		cout << "->";
 	cout << node->key << "(" << node->data << ")" << endl;
-	if (node->left)
-		print(node->left, lvl + 1, iter);
+	print(node->left, lvl + 1, iter);
 }
 
 template <class Key, class Data>
 void Tree<Key, Data>::print(Node* node, int lvl, rIterator& riter) {
-	if (!node)
+	if (!node) {
+		for (int i = 0; i < lvl; i++)
+			cout << "	";
+		cout << "->" << endl;
 		return;
+	}
 
-	if (node->right)
-		print(node->right, lvl + 1, riter);
+	print(node->right, lvl + 1, riter);
 	for (int i = 0; i < lvl; i++)
 		cout << "	";
 	if (riter != rend() && riter == node)
 		cout << "*";
 	cout << node->key << "(" << node->data << ")" << endl;
-	if (node->left)
-		print(node->left, lvl + 1, riter);
+	print(node->left, lvl + 1, riter);
 }
 
 template <class Key, class Data>
