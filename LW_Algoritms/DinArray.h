@@ -38,6 +38,7 @@ public:
 	class Iterator {
 	private:
 		DinArray<Data>* dinArray;
+		Data* mass;
 		int cur;
 
 	public:
@@ -52,6 +53,7 @@ public:
 	class rIterator {
 	private:
 		DinArray<Data>* dinArray;
+		Data* mass;
 		int cur;
 		
 	public:
@@ -299,9 +301,12 @@ DinArray<Data>::Iterator::Iterator(DinArray<Data>* _dinArray, int _cur) {
 	dinArray = _dinArray;
 	cur = _cur;
 
-	if (cur >= dinArray->get_size() && cur < 0) {
-		dinArray = nullptr;
+	if (cur < 0 || cur >= dinArray->get_size()) {
+		mass = nullptr;
 		cur = -1;
+	}
+	else {
+		mass = dinArray->Array + cur;
 	}
 }
 
@@ -310,41 +315,41 @@ Data& DinArray<Data>::Iterator::operator*() {
 	if (!dinArray)
 		throw IteratorInactive();
 
-	return dinArray->Array[cur];
+	return *mass;
 }
 
 template <class Data>
 bool DinArray<Data>::Iterator::operator++(int) {
-	++cur;
-	if (cur >= dinArray->get_size()) {
-		dinArray = nullptr;
+	if (cur < 0 || cur + 1 >= dinArray->get_size()) {
+		mass = nullptr;
 		cur = -1;
 		return false;
 	}
-
+	++cur;
+	++mass;
 	return true;
 }
 
 template <class Data>
 bool DinArray<Data>::Iterator::operator--(int) {
-	--cur;
-	if (cur < 0) {
+	if (cur <= 0) {
 		dinArray = nullptr;
 		cur = -1;
 		return false;
 	}
-
+	--cur;
+	--mass;
 	return true;
 }
 
 template <class Data>
 bool DinArray<Data>::Iterator::operator==(DinArray<Data>::Iterator other) {
-	return (dinArray->Array[cur] == other.dinArray[other.cur]);
+	return (mass == other.mass);
 }
 
 template <class Data>
 bool DinArray<Data>::Iterator::operator!=(DinArray<Data>::Iterator other) {
-	return (dinArray->Array[cur] != other.dinArray[other.cur]);
+	return (mass != other.mass);
 }
 
 
@@ -354,9 +359,12 @@ DinArray<Data>::rIterator::rIterator(DinArray<Data>* _dinArray, int _cur) {
 	dinArray = _dinArray;
 	cur = _cur;
 
-	if (cur >= dinArray->get_size() && cur < 0) {
-		dinArray = nullptr;
+	if (cur < 0 || cur >= dinArray->get_size()) {
+		mass = nullptr;
 		cur = -1;
+	}
+	else {
+		mass = dinArray->Array + cur;
 	}
 }
 
@@ -365,39 +373,39 @@ Data& DinArray<Data>::rIterator::operator*() {
 	if (!dinArray)
 		throw IteratorInactive();
 
-	return dinArray->Array[cur];
+	return *mass;
 }
 
 template <class Data>
 bool DinArray<Data>::rIterator::operator++(int) {
-	--cur;
-	if (cur < 0) {
+	if (cur <= 0) {
 		dinArray = nullptr;
 		cur = -1;
 		return false;
 	}
-
+	--cur;
+	--mass;
 	return true;
 }
 
 template <class Data>
 bool DinArray<Data>::rIterator::operator--(int) {
-	++cur;
-	if (cur >= dinArray->get_size()) {
+	if (cur < 0 || cur + 1 >= dinArray->get_size()) {
 		dinArray = nullptr;
 		cur = -1;
 		return false;
 	}
-
+	++cur;
+	++mass;
 	return true;
 }
 
 template <class Data>
 bool DinArray<Data>::rIterator::operator==(DinArray<Data>::rIterator other) {
-	return (dinArray->Array[cur] == other.dinArray[other.cur]);
+	return (mass == other.mass);
 }
 
 template <class Data>
 bool DinArray<Data>::rIterator::operator!=(DinArray<Data>::rIterator other) {
-	return (dinArray->Array[cur] != other.dinArray[other.cur]);
+	return (mass != other.mass);
 }
