@@ -6,6 +6,7 @@ using namespace std;
 
 typedef int selectType;
 
+template <class Data = int>
 class Menu {
 public:
 	static void printMainMenu() {
@@ -27,11 +28,10 @@ public:
 			<< "[15]	Запрос обратного итератора" << endl
 			<< "[16]	Запрос неустановленного прямого итератора" << endl
 			<< "[17]	Запрос неустановленного обратного итератора" << endl
-			<< "[18]	Вывести статистику" << endl
-			<< "[19]	Вывести массив" << endl
-			<< "[20]	Iterator == rIterator" << endl
-			<< "[21]	Iterator == end()" << endl
-			<< "[22]	rIterator == rend()" << endl
+			<< "[18]	Вывести массив" << endl
+			<< "[19]	Iterator == rIterator" << endl
+			<< "[20]	Iterator == end()" << endl
+			<< "[21]	rIterator == rend()" << endl
 			<< "[0]	Выход" << endl
 			<< endl << ">>> ";
 	}
@@ -45,15 +45,13 @@ public:
 			<< "[2] Предыдущий" << endl
 			<< "[3] Получить текущее значение" << endl
 			<< "[4] Изменить текущее значение" << endl
-			<< "[5] В начало" << endl
-			<< "[6] В конец" << endl
 			<< "[0] Выход" << endl
 			<< endl << ">>> ";
 	}
 
-	static void startMenu(DinArray<>& DA) {
-		DinArray<>::Iterator iter = DA.end();
-		DinArray<>::rIterator riter = DA.rend();
+	static void startMenu(DinArray<Data>& DA) {
+		auto iter = DA.end();
+		auto riter = DA.rend();
 
 		int input;
 		bool exit = false;
@@ -186,39 +184,33 @@ public:
 
 				case 14: {
 					iter = DA.begin();
-					Menu::iteratorMenu(&DA, &iter);
+					Menu::iteratorMenu(DA, iter);
 					system("pause");
 					break;
 				}
 
 				case 15: {
 					riter = DA.rbegin();
-					Menu::riteratorMenu(&DA, &riter);
+					Menu::riteratorMenu(DA, riter);
 					system("pause");
 					break;
 				}
 
 				case 16: {
 					iter = DA.end();
-					Menu::iteratorMenu(&DA, &iter);
+					Menu::iteratorMenu(DA, iter);
 					system("pause");
 					break;
 				}
 
 				case 17: {
 					riter = DA.rend();
-					Menu::riteratorMenu(&DA, &riter);
+					Menu::riteratorMenu(DA, riter);
 					system("pause");
 					break;
 				}
 
 				case 18: {
-					DA.print_stat();
-					system("pause");
-					break;
-				}
-
-				case 19: {
 					cout << ">>> Массив элементов: ";
 					if (DA.get_size() == 0)
 						cout << "Пуст";
@@ -229,19 +221,19 @@ public:
 					break;
 				}
 
-				case 20: {
+				case 19: {
 					cout << ">>> Результат операции: " << ((*iter) == (*riter)) << endl;
 					system("pause");
 					break;
 				}
 
-				case 21: {
+				case 20: {
 					cout << ">>> Результат операции: " << (iter == DA.end()) << endl;
 					system("pause");
 					break;
 				}
 
-				case 22: {
+				case 21: {
 					cout << ">>> Результат операции: " << (riter == DA.rend()) << endl;
 					system("pause");
 					break;
@@ -271,7 +263,7 @@ public:
 		}
 	}
 
-	static void iteratorMenu(DinArray<>* DA, DinArray<>::Iterator* iter) {
+	static void iteratorMenu(DinArray<Data>& DA, typename DinArray<Data>::Iterator& iter) {
 		int input;
 		bool exit = false;
 		while (!exit) {
@@ -283,41 +275,29 @@ public:
 			try {
 				switch (input) {
 				case 1: {
-					++(*iter);
+					iter++;
 					system("pause");
 					break;
 				}
 
 				case 2: {
-					--(*iter);
+					iter--;
 					system("pause");
 					break;
 				}
 
 				case 3: {
-					cout << "Текущее значение: " << iter->get_data() << endl;
+					cout << "Текущее значение: " << *iter << endl;
 					system("pause");
 					break;
 				}
 
 				case 4: {
 					selectType buf;
-					cout << "Текущее значение: " << iter->get_data() << endl;
+					cout << "Текущее значение: " << *iter << endl;
 					cout << "Новое значение: ";
 					cin >> buf;
-					cout << endl << DA->edit_obj(buf, iter->get_cur()) << endl;
-					system("pause");
-					break;
-				}
-
-				case 5: {
-					*iter = DA->begin();
-					system("pause");
-					break;
-				}
-
-				case 6: {
-					*iter = DA->end();
+					*iter = buf;
 					system("pause");
 					break;
 				}
@@ -342,7 +322,7 @@ public:
 		}
 	}
 
-	static void riteratorMenu(DinArray<>* DA, DinArray<>::rIterator* riter) {
+	static void riteratorMenu(DinArray<Data>& DA, typename DinArray<Data>::rIterator& riter) {
 		int input;
 		bool exit = false;
 		while (!exit) {
@@ -354,41 +334,29 @@ public:
 			try {
 				switch (input) {
 				case 1: {
-					++(*riter);
+					riter++;
 					system("pause");
 					break;
 				}
 
 				case 2: {
-					--(*riter);
+					riter--;
 					system("pause");
 					break;
 				}
 
 				case 3: {
-					cout << "Текущее значение: " << riter->get_data() << endl;
+					cout << "Текущее значение: " << *riter << endl;
 					system("pause");
 					break;
 				}
 
 				case 4: {
 					selectType buf;
-					cout << "Текущее значение: " << riter->get_data() << endl;
+					cout << "Текущее значение: " << *riter << endl;
 					cout << "Новое значение: ";
 					cin >> buf;
-					cout << endl << DA->edit_obj(buf, riter->get_cur()) << endl;
-					system("pause");
-					break;
-				}
-
-				case 5: {
-					*riter = DA->rbegin();
-					system("pause");
-					break;
-				}
-
-				case 6: {
-					*riter = DA->rend();
+					*riter = buf;
 					system("pause");
 					break;
 				}
