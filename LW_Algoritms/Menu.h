@@ -8,7 +8,7 @@ typedef int selectType;
 
 template <class Data = int>
 class Menu {
-public:
+private:
 	static void printMainMenu() {
 		cout << "Меню программы:" << endl
 			<< "[1]	Добавить новый элемент" << endl
@@ -49,6 +49,7 @@ public:
 			<< endl << ">>> ";
 	}
 
+public:
 	static void startMenu(DinArray<Data>& DA) {
 		auto iter = DA.end();
 		auto riter = DA.rend();

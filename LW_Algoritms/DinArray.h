@@ -7,10 +7,10 @@ using namespace std;
 template <class Data = int>
 class DinArray {
 private:
-	Data* Array;						//динамический массив
-	int n0;								//базовая мощность
-	int capacity;						//мощность
-	int size;							//текущий размер
+	Data* Array;
+	int n0;
+	int capacity;
+	int size;
 
 public:
 	DinArray();
@@ -19,7 +19,7 @@ public:
 	~DinArray();
 	void push(Data obj);
 	bool push(Data obj, int index);
-	void remove();
+	bool remove();
 	bool remove(int index);
 	bool remove_by_obj(Data obj);
 	void print();
@@ -165,15 +165,16 @@ bool DinArray<Data>::push(Data obj, int index) {
 }
 
 template <class Data>
-void DinArray<Data>::remove() {
+bool DinArray<Data>::remove() {
 	if (size == 0)
-		throw ArrayDelErr();
+		return false;
 
 	Array[size--] = NULL;
 
 	if ((capacity / 2) >= size) {
 		capacity_decrease();
 	}
+	return true;
 }
 
 template <class Data>
@@ -294,7 +295,7 @@ typename DinArray<Data>::rIterator DinArray<Data>::rend() {
 	return rIterator(this, -1);
 }
 
-////----------------------------------Итераторы-------------------------------------------\\\\
+//----------------------------------Iterator-------------------------------------------\\
 
 template <class Data>
 DinArray<Data>::Iterator::Iterator(DinArray<Data>* _dinArray, int _cur) {
@@ -352,7 +353,7 @@ bool DinArray<Data>::Iterator::operator!=(DinArray<Data>::Iterator other) {
 	return (mass != other.mass);
 }
 
-
+//----------------------------------rIterator------------------------------------------\\
 
 template <class Data>
 DinArray<Data>::rIterator::rIterator(DinArray<Data>* _dinArray, int _cur) {

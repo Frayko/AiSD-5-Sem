@@ -19,14 +19,6 @@ public:
 	}
 };
 
-class ArrayDelErr : public ArrayError {
-public:
-	ArrayDelErr() {}
-	void ErrMsg() const {
-		cerr << ">>> Ошибка удаления! Список пуст!\n";
-	}
-};
-
 class IteratorError {
 public:
 	IteratorError() {}
