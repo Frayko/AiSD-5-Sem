@@ -19,14 +19,6 @@ public:
 	}
 };
 
-class TreeDelErr : public TreeError {
-public:
-	TreeDelErr() {}
-	void ErrMsg() const {
-		cerr << ">>> Ошибка удаления! Дерево пусто!\n";
-	}
-};
-
 class TreeFindErr : public TreeError {
 public:
 	TreeFindErr() {}

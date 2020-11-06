@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Tree.h"
 #include "listErrors.h"
+#include "Test.h"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ private:
 			<< "[18]	rIterator == rend()" << endl
 			<< "[19]	Iterator == rIterator" << endl
 			<< "[20]	Получить значение счётчика" << endl
+			<< "[21]	Тесты трудоёмкости" << endl
 			<< "[0]	Выход" << endl
 			<< endl << ">>> ";
 	}
@@ -351,6 +353,24 @@ public:
 
 				case 20: {
 					cout << "Значение счётчика: " << tree.getCOUNTER() << endl;
+					system("pause");
+					break;
+				}
+
+				case 21: {
+					system("cls");
+
+					for (int i = 500, j = 1; i <= 2500; i += 500, j++) {
+						cout << "Итерация #" << j << "" << endl;
+						cout << "Тест трудоёмкости операций случайного BST-дерева" << endl;
+						test_rand(i);
+
+						cout << endl << "Тест трудоёмкости операций вырожденного BST-дерева" << endl;
+						test_ord(i);
+
+						cout << endl << "-----------------" << endl << endl;
+					}
+
 					system("pause");
 					break;
 				}

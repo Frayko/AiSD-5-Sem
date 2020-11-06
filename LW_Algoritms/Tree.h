@@ -33,6 +33,7 @@ private:
 	void printKeys(Node* node);
 	Node* lesserParent(Node* current, Node* target);
 	Node* biggerParent(Node* current, Node* target);
+	Node* getNode(Key key);
 	Node* getNext(Node* node);
 	Node* getPrev(Node* node);
 
@@ -51,7 +52,6 @@ public:
 	bool isEmpty();
 	bool insert(Key key, Data data);
 	bool remove(Key key);
-	Node* getNode(Key key);
 	Data find(Key key);
 	bool set(Key key, Data data);
 	Node* min(Node* node);
@@ -174,6 +174,11 @@ void Tree<Key, Data>::clear() {
 template <class Key, class Data>
 int Tree<Key, Data>::getSize() {
 	return this->size;
+}
+
+template <class Key, class Data>
+typename Tree<Key, Data>::Node* Tree<Key, Data>::getRoot() {
+	return this->root;
 }
 
 template <class Key, class Data>
@@ -464,11 +469,6 @@ void Tree<Key, Data>::print() {
 }
 
 template <class Key, class Data>
-typename Tree<Key, Data>::Node* Tree<Key, Data>::getRoot() {
-	return this->root;
-}
-
-template <class Key, class Data>
 void Tree<Key, Data>::print(Node* node, int lvl) {
 	if (!node) {
 		for (int i = 0; i < lvl; i++)
@@ -480,7 +480,7 @@ void Tree<Key, Data>::print(Node* node, int lvl) {
 	print(node->right, lvl + 1);
 	for (int i = 0; i < lvl; i++)
 		cout << "	";
-	cout << node->key << "(" << node->data << ")" << endl;
+	cout << node->key << "(" << node->countSubNode << ")" << endl;
 	print(node->left, lvl + 1);
 }
 
@@ -498,7 +498,7 @@ void Tree<Key, Data>::print(Node* node, int lvl, Iterator& iter) {
 		cout << "	";
 	if (iter != end() && iter == node)
 		cout << "->";
-	cout << node->key << "(" << node->data << ")" << endl;
+	cout << node->key << "(" << node->countSubNode << ")" << endl;
 	print(node->left, lvl + 1, iter);
 }
 
@@ -516,7 +516,7 @@ void Tree<Key, Data>::print(Node* node, int lvl, rIterator& riter) {
 		cout << "	";
 	if (riter != rend() && riter == node)
 		cout << "*";
-	cout << node->key << "(" << node->data << ")" << endl;
+	cout << node->key << "(" << node->countSubNode << ")" << endl;
 	print(node->left, lvl + 1, riter);
 }
 
