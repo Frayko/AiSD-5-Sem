@@ -89,7 +89,7 @@ void test_rand(int n) {
         }
     cout << "items count: " << tree.getSize() << endl;
     //теоретическая оценка трудоёмкости операции добавления и удаления AVL
-    cout << "log2(n)= " << (log((double)n) / log(2.0)) << endl;
+    cout << "log2(n) + 0.25= " << (log((double)n) / log(2.0)) + 0.25 << endl;
     //минимальный порог теоретической высоты AVL дерева
     cout << "log2(n + 1)= " << log((double)n + 1.0) / log(2.0) << endl;
     //максимальный порог теоретической высоты AVL дерева
