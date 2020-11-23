@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iostream>
 #include "AVLTree.h"
+#include "Tree.h"
 #include "listErrors.h"
 using namespace std;
 
@@ -89,11 +90,7 @@ void test_rand(int n) {
         }
     cout << "items count: " << tree.getSize() << endl;
     //теоретическа€ оценка трудоЄмкости операции добавлени€ и удалени€ AVL
-    cout << "log2(n) + 0.25= " << (log((double)n) / log(2.0)) + 0.25 << endl;
-    //минимальный порог теоретической высоты AVL дерева
-    cout << "log2(n + 1)= " << log((double)n + 1.0) / log(2.0) << endl;
-    //максимальный порог теоретической высоты AVL дерева
-    cout << "1.44*log2(n + 1) - 0.32 = " << 1.44 * (log((double)n + 1.0) / log(2.0)) - 0.32 << endl;
+    cout << "log2(n) + 0.25 = " << (log((double)n) / log(2.0)) + 0.25 << endl;
     //экспериментальной оценки трудоЄмкости вставки
     cout << "Count insert: " << I / (n / 2) << endl;
     //экспериментальной оценки трудоЄмкости удалени€
@@ -106,9 +103,79 @@ void test_rand(int n) {
     delete[] m;
 }
 
+void test_rand_Tree(int n) {
+    //создание дерева дл€ 64 Ц разр€дных ключей типа INT_64
+    Tree<INT_64, int> tree;
+    //массив дл€ ключей, которые присутствуют в дереве
+    INT_64* m = new INT_64[n];
+    //установка первого случайного числа
+    sRand();
+    //заполнение дерева и массива элементами со случайными ключами
+    for (int i = 0; i < n; i++) {
+        m[i] = LineRand();
+        tree.insert(m[i], 1);
+    }
+    //вывод размера дерева до теста
+    cout << "items count: " << tree.getSize() << endl;
+    //обнуление счЄтчиков трудоЄмкости вставки, удалени€ и поиска
+    double I = 0;
+    double D = 0;
+    double S = 0;
+    //генераци€ потока операций, 10% - промахи операций
+    for (int i = 0; i < n / 2; i++)
+        if (i % 10 == 0) //10% промахов
+        {
+            Tree<INT_64, int>::resetCOUNTER();
+            tree.remove(LineRand());
+            D += Tree<INT_64, int>::getCOUNTER();
+            Tree<INT_64, int>::resetCOUNTER();
+            tree.insert(m[rand() % n], 1);
+            I += Tree<INT_64, int>::getCOUNTER();
+            try {
+                Tree<INT_64, int>::resetCOUNTER();
+                tree.find(LineRand());
+                S += Tree<INT_64, int>::getCOUNTER();
+            }
+            catch (const TreeError& te) {
+                S += Tree<INT_64, int>::getCOUNTER();
+            }
+        }
+        else //90% успешных операций
+        {
+            int ind = rand() % n;
+            Tree<INT_64, int>::resetCOUNTER();
+            tree.remove(m[ind]);
+            D += Tree<INT_64, int>::getCOUNTER();
+            INT_64 key = LineRand();
+            Tree<INT_64, int>::resetCOUNTER();
+            tree.insert(key, 1);
+            I += Tree<INT_64, int>::getCOUNTER();
+            m[ind] = key;
+            try {
+                Tree<INT_64, int>::resetCOUNTER();
+                tree.find(m[rand() % n]);
+                S += Tree<INT_64, int>::getCOUNTER();
+            }
+            catch (const TreeError& te) {
+                S += Tree<INT_64, int>::getCOUNTER();
+            }
+        }
+    cout << "items count: " << tree.getSize() << endl;
+    //теоретическа€ оценка трудоЄмкости BST дерева
+    cout << "1.39*log2(n) = " << 1.39 * (log((double)n) / log(2.0)) << endl;
+    //экспериментальной оценки трудоЄмкости вставки
+    cout << "Count insert: " << I / (n / 2) << endl;
+    //экспериментальной оценки трудоЄмкости удалени€
+    cout << "Count delete: " << D / (n / 2) << endl;
+    //экспериментальной оценки трудоЄмкости поиска
+    cout << "Count search: " << S / (n / 2) << endl;
+    //освобождение пам€ти массива m[]
+    delete[] m;
+}
+
 void test_ord(int n) {
     //создание дерева дл€ 64 Ц разр€дных ключей типа INT_64
-    AVLTree<INT_64, int> tree;
+    Tree<INT_64, int> tree;
     //массив дл€ ключей, которые присутствуют в дереве
     INT_64* m = new INT_64[n];
     //заполнение дерева и массива элементами с возрастающими чЄтными //ключами на интервале [0, 10000, 20000, ... ,10000*n]

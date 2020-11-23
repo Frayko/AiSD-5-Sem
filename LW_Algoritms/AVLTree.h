@@ -16,8 +16,8 @@ private:
 
 	typename Tree<Key, Data>::Node* insert(Key key, Data data, typename Tree<Key, Data>::Node* node, bool& flag);
 	typename Tree<Key, Data>::Node* remove(Key key, typename Tree<Key, Data>::Node* node, bool& flag);
-	typename Tree<Key, Data>::Node* findMax(typename Tree<Key, Data>::Node* node);
 	typename Tree<Key, Data>::Node* removeMax(typename Tree<Key, Data>::Node* node);
+	typename Tree<Key, Data>::Node* findMax(typename Tree<Key, Data>::Node* node);
 	virtual void print(typename Tree<Key, Data>::Node* node, int lvl);
 
 public:

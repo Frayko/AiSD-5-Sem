@@ -27,16 +27,18 @@ protected:
 	void copy(Node* node);
 	void clear(Node* node);
 	bool insert(Key key, Data data, Node* parent, Node* current);
-	Node* getNode(Key key, Node* current);
 	bool remove(Key key, Node* parent, Node* current);
 	Node* maxWithDel(Node* parent, Node* current);
 	virtual void print(Node* node, int lvl);
 	void printKeys(Node* node);
 	Node* lesserParent(Node* current, Node* target);
 	Node* biggerParent(Node* current, Node* target);
+	Node* getNode(Key key, Node* current);
 	Node* getNode(Key key);
 	Node* getNext(Node* node);
 	Node* getPrev(Node* node);
+	Node* min(Node* node);
+	Node* max(Node* node);
 
 	static void incrementCOUNTER();
 
@@ -55,8 +57,6 @@ public:
 	virtual bool remove(Key key);
 	Data find(Key key);
 	bool set(Key key, Data data);
-	Node* min(Node* node);
-	Node* max(Node* node);
 	virtual void print();
 	void printKeys();
 	int getSerialNumber(Key key);

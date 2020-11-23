@@ -340,10 +340,13 @@ public:
 				case 19: {
 					system("cls");
 
-					for (int i = 5000, j = 1; i <= 20000; i += 5000, j++) {
+					for (int i = 5000, j = 1; i <= 25000; i += 5000, j++) {
 						cout << "Итерация #" << j << "" << endl;
 						cout << "Тест трудоёмкости операций случайного AVL-дерева" << endl;
 						test_rand(i);
+
+						cout << endl << "Тест трудоёмкости операций случайного BST-дерева" << endl;
+						test_rand_Tree(i);
 
 						cout << endl << "-----------------" << endl << endl;
 					}
