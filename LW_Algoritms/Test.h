@@ -175,6 +175,83 @@ void test_rand_Tree(int n) {
 
 void test_ord(int n) {
     //создание дерева дл€ 64 Ц разр€дных ключей типа INT_64
+    AVLTree<INT_64, int> tree;
+    //массив дл€ ключей, которые присутствуют в дереве
+    INT_64* m = new INT_64[n];
+    //заполнение дерева и массива элементами с возрастающими чЄтными //ключами на интервале [0, 10000, 20000, ... ,10000*n]
+    for (int i = 0; i < n; i++) {
+        m[i] = i * 10000;
+        tree.insert(m[i], 1);
+    }
+    //вывод размера дерева до теста
+    cout << "items count: " << tree.getSize() << endl;
+    //обнуление счЄтчиков трудоЄмкости вставки, удалени€ и поиска
+    double I = 0;
+    double D = 0;
+    double S = 0;
+    //установка первого случайного числа
+    sRand();
+    //генераци€ потока операций, 10% - промахи операций
+    for (int i = 0; i < n / 2; i++) {
+        if (i % 10 == 0) //10% промахов
+        {
+            int k = LineRand() % (10000 * n);
+            k = k + !(k % 2); //случайный нечЄтный ключ
+            Tree<INT_64, int>::resetCOUNTER();
+            tree.remove(k);
+            D += Tree<INT_64, int>::getCOUNTER();
+            Tree<INT_64, int>::resetCOUNTER();
+            tree.insert(m[rand() % n], 1);
+            I += Tree<INT_64, int>::getCOUNTER();
+            k = LineRand() % (10000 * n);
+            k = k + !(k % 2); // случайный нечЄтный ключ
+            try {
+                Tree<INT_64, int>::resetCOUNTER();
+                tree.find(k);
+                S += Tree<INT_64, int>::getCOUNTER();
+            }
+            catch (const TreeError& te) {
+                S += Tree<INT_64, int>::getCOUNTER();
+            }
+        }
+        else //90% успешных операций
+        {
+            int ind = rand() % n;
+            Tree<INT_64, int>::resetCOUNTER();
+            tree.remove(m[ind]);
+            D += Tree<INT_64, int>::getCOUNTER();
+            int k = LineRand() % (10000 * n);
+            k = k + k % 2; // случайный чЄтный ключ
+            Tree<INT_64, int>::resetCOUNTER();
+            tree.insert(k, 1);
+            I += Tree<INT_64, int>::getCOUNTER();
+            m[ind] = k;
+            try {
+                Tree<INT_64, int>::resetCOUNTER();
+                tree.find(m[rand() % n]);
+                S += Tree<INT_64, int>::getCOUNTER();
+            }
+            catch (const TreeError& te) {
+                S += Tree<INT_64, int>::getCOUNTER();
+            }
+        }
+    }
+    //вывод результатов:
+
+    // вывод размера дерева после теста
+    cout << "items count: " << tree.getSize() << endl;
+    //экспериментальной оценки трудоЄмкости вставки
+    cout << "Count insert: " << I / (n / 2) << endl;
+    //экспериментальной оценки трудоЄмкости удалени€
+    cout << "Count delete: " << D / (n / 2) << endl;
+    //экспериментальной оценки трудоЄмкости поиска
+    cout << "Count search: " << S / (n / 2) << endl;
+    //освобождение пам€ти массива m[]
+    delete[] m;
+}
+
+void test_ord_Tree(int n) {
+    //создание дерева дл€ 64 Ц разр€дных ключей типа INT_64
     Tree<INT_64, int> tree;
     //массив дл€ ключей, которые присутствуют в дереве
     INT_64* m = new INT_64[n];
@@ -240,8 +317,6 @@ void test_ord(int n) {
 
     // вывод размера дерева после теста
     cout << "items count: " << tree.getSize() << endl;
-    //теоретической оценки трудоЄмкости операций BST
-    cout << "n/2 = " << n / 2 << endl;
     //экспериментальной оценки трудоЄмкости вставки
     cout << "Count insert: " << I / (n / 2) << endl;
     //экспериментальной оценки трудоЄмкости удалени€
