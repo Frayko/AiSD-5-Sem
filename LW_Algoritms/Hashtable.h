@@ -25,6 +25,7 @@ class HashTableOA
 		K key;//ключ
 		D data;//данные
 		char state;//состояние элемента
+		Node(char _state = 'f') : state(_state) {}
 	};
 protected:
 	Node* List;
@@ -41,6 +42,7 @@ public:
 	int TestDelete(K);
 	int TestSearch(K);
 	void Print();
+
 	//Класс итератора
 public:
 	class Iterator {
@@ -48,13 +50,19 @@ public:
 		Node* cur;
 		int i;
 	public:
-		Iterator(HashTableOA* _p) {
-			ptr = _p;
-			cur = &(ptr->List[0]);
-			i = 0;
+		Iterator(HashTableOA* _p, bool begin = false) : ptr(_p), i(0) {
+			if (begin) {
+				if (ptr->Count() == 0)
+					cur = nullptr;
+				else
+					cur = &(ptr->List[0]);
+			}
+			else {
+				cur = nullptr;
+			}
 		}
 		void next() {
-			if (cur->state != 'b')
+			if (!cur || cur->state != 'b')
 				return;
 			do {
 				cur = &(ptr->List[++i]);
@@ -71,23 +79,36 @@ public:
 			if (i == m)
 				throw exception("В таблице нет элементов!");
 		}
+		bool operator==(Iterator it) {
+			return this->cur == it.cur;
+		}
+		bool operator!=(Iterator it) {
+			return this->cur != it.cur;
+		}
 		bool is_off() {			//проверка выхода итератора за пределы коллекции
-			if (cur->state != 'b')
+			if (!cur || cur->state != 'b')
 				return true;
 			return false;
 		}
 		D& operator * () {  	//доступ к данным текущего элемента
-			if (cur->state != 'b')
+			if (!cur || cur->state != 'b')
 				throw exception("Итератор 'не установлен'");
 			return cur->data;		//ссылка на текущий элемент
 		}
 		K showkey() {			//чтение ключа текущего элемента
-			if (cur->state != 'b')
+			if (!cur || cur->state != 'b')
 				throw exception("Итератор 'не установлен'");
 			return cur->key;
 		}
 	};
 	friend class Iterator;
+
+	Iterator begin() {
+		return HashTableOA<K, D>::Iterator(this, true);
+	}
+	Iterator end() {
+		return HashTableOA<K, D>::Iterator(this, false);
+	}
 };
 
 //Конструктор
@@ -333,11 +354,7 @@ public:
 		int i;
 
 	public:
-		Iterator(HashTableCC* _p) {
-			ptr = _p;
-			cur = ptr->List[0];
-			i = 0;
-		}
+		Iterator(HashTableCC* _p, Node* _c = nullptr) : ptr(_p), cur(_c), i(0) {}
 		void next() {
 			if (!cur || i == M) return;
 			if (cur->next) {
@@ -359,6 +376,12 @@ public:
 			if (!cur)
 				throw exception("В таблице нет элементов!");
 		}
+		bool operator==(Iterator it) {
+			return this->cur == it.cur;
+		}
+		bool operator!=(Iterator it) {
+			return this->cur != it.cur;
+		}
 		bool is_off() {
 			if (!cur || i == M)
 				return true;
@@ -376,6 +399,20 @@ public:
 		}
 	};
 	friend class Iterator;
+
+	Iterator begin() {
+		Node** test = List;
+		Node* _cur = nullptr;
+		for (int i = 0; i < M; i++) {
+			_cur = test[i];
+			if (_cur)
+				break;
+		}
+		return HashTableCC<K, D>::Iterator(this, _cur);
+	}
+	Iterator end() {
+		return HashTableCC<K, D>::Iterator(this, nullptr);
+	}
 };
 
 //Конструктор

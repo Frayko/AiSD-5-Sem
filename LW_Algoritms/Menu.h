@@ -13,7 +13,7 @@ private:
 			<< "[3] Оценка качества хеширования кси2" << endl
 			<< "[4] Тестирование хеш-таблицы с открытой адресацией" << endl
 			<< "[5] Тестирование хеш-таблицы с цепочками коллизий" << endl
-			<< "[Esc] Выход" << endl << endl << ">>> ";
+			<< "[0] Выход" << endl << endl << ">>> ";
 	}
 
 	static void printHashTableMenu() {
@@ -25,8 +25,13 @@ private:
 			<< "[6] Количиство элементов" << endl
 			<< "[7] Проверка на пустоту" << endl
 			<< "[8] Очистка таблицы" << endl
-			<< "[9] Прямой итератор" << endl
-			<< "[Esc] Выход" << endl << endl << ">>> ";
+			<< "[9] Прямой итератор в режиме begin()" << endl
+			<< "[10] Прямой итератор в режиме end()" << endl
+			<< "[11] Iterator == begin()" << endl
+			<< "[12] Iterator == end()" << endl
+			<< "[13] Iterator != begin()" << endl
+			<< "[14] Iterator != end()" << endl
+			<< "[0] Выход" << endl << endl << ">>> ";
 	}
 
 	static void printIteratorMenu() {
@@ -37,112 +42,180 @@ private:
 			<< "[4] Прочитать данные по текущему элементу" << endl
 			<< "[5] Перезаписать текущий элемент" << endl
 			<< "[6] Прочитать ключ по текущему элементу" << endl
-			<< "[Esc] Выход" << endl << endl << ">>> ";
+			<< "[0] Выход" << endl << endl << ">>> ";
 	}
 public:
 	static void start(HashTableOA<char*, int>& htoa, HashTableCC<char*, int>& htcc, int n) {
-		int d, i, j, *m, cnt, p, kk;
+		setlocale(LC_ALL, "Russian");
+		SetConsoleCP(1251);
+		SetConsoleOutputCP(1251);
+		int d, i, j, *m, cnt, p, kk, input;
 		double x, x2, x_sum, a, alfa, cntI, cntD, cntS;
 		char k[100], c[22], * t, ** mas;
-		HashTableOA <char*, int>::Iterator it_oa(&htoa);
-		HashTableCC <char*, int>::Iterator it_cc(&htcc);
+		auto it_oa = htoa.begin();
+		auto it_cc = htcc.begin();
+		//HashTableOA <char*, int>::Iterator it_oa(&htoa);
+		//HashTableCC <char*, int>::Iterator it_cc(&htcc);
 		bool exit, iterator_exit;
 		while (true) {
 			system("cls");
 			exit = false;
 			printMainMenu();
-			switch (_getch()) {
-			case '1':
+			cin >> input;
+			switch (input) {
+			case 1:
 				while (true) {
 					system("cls");
 					cout << "Хеш-таблица с открытой адресацией" << endl;
 					printHashTableMenu();
+					cin >> input;
 					try {
-						switch (_getch()) {
-						case '1':
+						switch (input) {
+						case 1:
 							cout << "Введите ключ: ";
 							cin.ignore(); cin.getline(k, 100);
 							cout << "Введите данные: ";
 							cin >> d;
 							htoa.Insert(k, d);
 							break;
-						case '2':
+						case 2:
 							cout << "Введите ключ: ";
 							cin.ignore(); cin.getline(k, 100);
 							htoa.Delete(k);
 							break;
-						case '3':
+						case 3:
 							cout << "Введите ключ: ";
 							cin.ignore(); cin.getline(k, 100);
 							cout << "Данные, найденные по ключу по ключу: " << htoa.Search(k) << endl;
 							system("pause");
 							break;
-						case '4':
+						case 4:
 							htoa.Print();
 							system("pause");
 							break;
-						case '5':
+						case 5:
 							cout << "Альфа: " << htoa.GetAlfa() << endl;
 							system("pause");
 							break;
-						case '6':
+						case 6:
 							cout << "Количество элементов: " << htoa.Count() << endl;
 							system("pause");
 							break;
-						case '7':
+						case 7:
 							if (htoa.isEmpty())
 								cout << "Таблица пуста" << endl;
 							else
 								cout << "Таблица не пуста" << endl;
 							system("pause");
 							break;
-						case '8':
+						case 8:
 							htoa.~HashTableOA();
 							cout << "Таблица очищена" << endl;
 							system("pause");
 							break;
-						case '9':
+						case 9:
+							it_oa = htoa.begin();
 							iterator_exit = false;
 							while (!iterator_exit) {
 								system("cls");
 								printIteratorMenu();
-								switch (_getch()) {
-								case '1':
+								cin >> input;
+								switch (input) {
+								case 1:
 									it_oa.first();
 									cout << "Итератор установлен на начало" << endl;
 									system("pause");
 									break;
-								case '2':
+								case 2:
 									it_oa.next();
 									cout << "Переход к следующему элементу" << endl;
 									system("pause");
 									break;
-								case '3':
+								case 3:
 									if (!it_oa.is_off())
 										cout << "Итератор в режиме 'установленный'" << endl;
 									else
 										cout << "Итератор в режиме 'не установленный'" << endl;
 									system("pause");
 									break;
-								case '4':
+								case 4:
 									cout << "Данные по текущему ключу: " << *it_oa << endl;
 									system("pause");
 									break;
-								case '5':
+								case 5:
 									cout << "Введите новые данные:";
 									cin >> d;
 									*it_oa = d;
 									break;
-								case '6':
+								case 6:
 									cout << "Текущий ключ: " << it_oa.showkey() << endl;
 									system("pause");
 									break;
-								case 27:
+								case 0:
 									iterator_exit = true;
 								}
 							}
 							break;
-						case 27:
+						case 10:
+							it_oa = htoa.end();
+							iterator_exit = false;
+							while (!iterator_exit) {
+								system("cls");
+								printIteratorMenu();
+								cin >> input;
+								switch (input) {
+								case 1:
+									it_oa.first();
+									cout << "Итератор установлен на начало" << endl;
+									system("pause");
+									break;
+								case 2:
+									it_oa.next();
+									cout << "Переход к следующему элементу" << endl;
+									system("pause");
+									break;
+								case 3:
+									if (!it_oa.is_off())
+										cout << "Итератор в режиме 'установленный'" << endl;
+									else
+										cout << "Итератор в режиме 'не установленный'" << endl;
+									system("pause");
+									break;
+								case 4:
+									cout << "Данные по текущему ключу: " << *it_oa << endl;
+									system("pause");
+									break;
+								case 5:
+									cout << "Введите новые данные:";
+									cin >> d;
+									*it_oa = d;
+									break;
+								case 6:
+									cout << "Текущий ключ: " << it_oa.showkey() << endl;
+									system("pause");
+									break;
+								case 0:
+									iterator_exit = true;
+								}
+							}
+							break;
+						case 11:
+							cout << "Результат: " << (it_oa == htoa.begin()) << endl;
+							system("pause");
+							break;
+						case 12:
+							cout << "Результат: " << (it_oa == htoa.end()) << endl;
+							system("pause");
+							break;
+						case 13:
+							cout << "Результат: " << (it_oa != htoa.begin()) << endl;
+							system("pause");
+							break;
+						case 14:
+							cout << "Результат: " << (it_oa != htoa.end()) << endl;
+							system("pause");
+							break;
+						case 0:
 							exit = true;
 						}
 						if (exit)break;
@@ -154,97 +227,159 @@ public:
 					}
 				}
 				break;
-			case '2':
+			case 2:
 				while (true) {
 					system("cls");
 					cout << "Хеш-таблица с цепочками коллизий" << endl;
 					printHashTableMenu();
+					cin >> input;
 					try {
-						switch (_getch()) {
-						case '1':
+						switch (input) {
+						case 1:
 							cout << "Введите ключ: ";
 							cin.ignore(); cin.getline(k, 100);
 							cout << "Введите данные: ";
 							cin >> d;
 							htcc.Insert(k, d);
 							break;
-						case '2':
+						case 2:
 							cout << "Введите ключ: ";
 							cin.ignore(); cin.getline(k, 100);
 							htcc.Delete(k);
 							break;
-						case '3':
+						case 3:
 							cout << "Введите ключ: ";
 							cin.ignore(); cin.getline(k, 100);
 							cout << "Данные, найденные по ключу по ключу: " << htcc.Search(k) << endl;
 							system("pause");
 							break;
-						case '4':
+						case 4:
 							htcc.Print();
 							system("pause");
 							break;
-						case '5':
+						case 5:
 							cout << "Альфа: " << htcc.GetAlfa() << endl;
 							system("pause");
 							break;
-						case '6':
+						case 6:
 							cout << "Количество элементов: " << htcc.Count() << endl;
 							system("pause");
 							break;
-						case '7':
+						case 7:
 							if (htcc.isEmpty())
 								cout << "Таблица пуста" << endl;
 							else
 								cout << "Таблица не пуста" << endl;
 							system("pause");
 							break;
-						case '8':
+						case 8:
 							htcc.~HashTableCC();
 							cout << "Таблица очищена" << endl;
 							system("pause");
 							break;
-						case '9':
+						case 9:
+							it_cc = htcc.begin();
 							iterator_exit = false;
 							while (!iterator_exit) {
 								system("cls");
 								printIteratorMenu();
-								switch (_getch()) {
-								case '1':
+								cin >> input;
+								switch (input) {
+								case 1:
 									it_cc.first();
 									cout << "Итератор установлен на начало" << endl;
 									system("pause");
 									break;
-								case '2':
+								case 2:
 									it_cc.next();
 									cout << "Переход к следующему элементу" << endl;
 									system("pause");
 									break;
-								case '3':
+								case 3:
 									if (!it_cc.is_off())
 										cout << "Итератор в режиме 'установленный'" << endl;
 									else
 										cout << "Итератор в режиме 'не установленный'" << endl;
 									system("pause");
 									break;
-								case '4':
+								case 4:
 									cout << "Данные по текущему ключу: " << *it_cc << endl;
 									system("pause");
 									break;
-								case '5':
+								case 5:
 									cout << "Введите новые данные:";
 									cin >> d;
 									*it_cc = d;
 									break;
-								case '6':
+								case 6:
 									cout << "Текущий ключ: " << it_cc.showkey() << endl;
 									system("pause");
 									break;
-								case 27:
+								case 0:
 									iterator_exit = true;
 								}
 							}
 							break;
-						case 27:
+						case 10:
+							it_cc = htcc.end();
+							iterator_exit = false;
+							while (!iterator_exit) {
+								system("cls");
+								printIteratorMenu();
+								cin >> input;
+								switch (input) {
+								case 1:
+									it_cc.first();
+									cout << "Итератор установлен на начало" << endl;
+									system("pause");
+									break;
+								case 2:
+									it_cc.next();
+									cout << "Переход к следующему элементу" << endl;
+									system("pause");
+									break;
+								case 3:
+									if (!it_cc.is_off())
+										cout << "Итератор в режиме 'установленный'" << endl;
+									else
+										cout << "Итератор в режиме 'не установленный'" << endl;
+									system("pause");
+									break;
+								case 4:
+									cout << "Данные по текущему ключу: " << *it_cc << endl;
+									system("pause");
+									break;
+								case 5:
+									cout << "Введите новые данные:";
+									cin >> d;
+									*it_cc = d;
+									break;
+								case 6:
+									cout << "Текущий ключ: " << it_cc.showkey() << endl;
+									system("pause");
+									break;
+								case 0:
+									iterator_exit = true;
+								}
+							}
+							break;
+						case 11:
+							cout << "Результат: " << (it_cc == htcc.begin()) << endl;
+							system("pause");
+							break;
+						case 12:
+							cout << "Результат: " << (it_cc == htcc.end()) << endl;
+							system("pause");
+							break;
+						case 13:
+							cout << "Результат: " << (it_cc != htcc.begin()) << endl;
+							system("pause");
+							break;
+						case 14:
+							cout << "Результат: " << (it_cc != htcc.end()) << endl;
+							system("pause");
+							break;
+						case 0:
 							exit = true;
 						}
 						if (exit)break;
@@ -256,7 +391,7 @@ public:
 					}
 				}
 				break;
-			case '3':
+			case 3:
 				system("cls");
 				int size;
 				x_sum = 0;
@@ -290,7 +425,7 @@ public:
 				cout << size - sqrt(double(size)) << " < " << x_sum / 5 << " < " << size + sqrt(double(size)) << endl;
 				system("pause");
 				break;
-			case '4':
+			case 4:
 				system("cls");
 				cntI = cntD = cntS = 0;
 				cout << "Тестирование хеш-таблицы с открытой адресацией" << endl;
@@ -349,7 +484,7 @@ public:
 				cout << "Поиск \t\t" << setprecision(3) << 2 * cntS / (alfa * size) << " с\t\t" << 0.9 * (0.5) * (1 + (1 / (1 - alfa))) + 0.1 * (0.5) * (1 + (1 / (1 - alfa)) * (1 / (1 - alfa))) << " с" << endl;
 				system("pause");
 				break;
-			case '5':
+			case 5:
 				system("cls");
 				cntI = cntD = cntS = 0;
 				cout << "Тестирование хеш-таблицы с цепочкой коллизий" << endl;
@@ -409,7 +544,7 @@ public:
 				cout << "Поиск \t\t" << setprecision(3) << 2 * cntS / (alfa * size) << " с\t\t" << 0.9 * (0.5) * (1 + (1 / (1 - alfa))) + 0.1 * (0.5) * (1 + (1 / (1 - alfa)) * (1 / (1 - alfa))) << " с" << endl;
 				system("pause");
 				break;
-			case 27:
+			case 0:
 				return;
 			}
 		}
