@@ -41,7 +41,8 @@ public:
 	int TestSearch(K);
 	void Print();
 	int getM();
-
+	unsigned Hash(unsigned k);
+	unsigned Hash(unsigned k, int i);
 	//Класс итератора
 public:
 	class Iterator {
@@ -110,6 +111,18 @@ public:
 	}
 };
 
+template <class K, class D>
+unsigned HashTableOA<K, D>::Hash(unsigned k) {
+	double X = A * k;
+	X = X - (unsigned)X;
+	return (unsigned)(X * m);
+}
+
+template <class K, class D>
+unsigned HashTableOA<K, D>::Hash(unsigned k, int i) {
+	return (unsigned)((Hash(k) + i) % m);
+}
+
 //Конструктор
 template <class K, class D>
 HashTableOA<K, D>::HashTableOA(int k) {
@@ -160,24 +173,24 @@ double HashTableOA<K, D>::GetAlfa() {
 //Включение нового объекта с заданным ключом
 template <class K, class D>
 void HashTableOA<K, D>::Insert(K str, D val) {
-	int h, h1, pos = -1, j = 0;
+	int pos = -1, i = 0;
+	unsigned h;
 	unsigned k = Key(str);
-	h = (int)(m * (A * k - (int)(A * k)));
-	h1 = h;
-while (j != m && List[h1].state != 'f') {
-		h1 = (h + j) % m;
-		if (List[h1].state == 'd' && pos == -1)
-			pos = h1;
-		if (List[h1].state == 'b') {
-			if (strcmp(List[h1].key, str) == 0)
+	h = Hash(k);
+	while (i != m && List[h].state != 'f') {
+		h = Hash(k, i);
+		if (List[h].state == 'd' && pos == -1)
+			pos = h;
+		if (List[h].state == 'b') {
+			if (strcmp(List[h].key, str) == 0)
 				throw exception("Этот элемент уже существует!");
 		}
-		j++;
+		i++;
 	}
-	if (j == m && List[h1].state == 'b' && pos == -1)
+	if (i == m && List[h].state == 'b' && pos == -1)
 		throw exception("В хеш-таблице нет места!");
 	if (pos == -1)
-		pos = h1;
+		pos = h;
 	List[pos].key = str;
 	List[pos].data = val;
 	List[pos].state = 'b';
@@ -186,24 +199,25 @@ while (j != m && List[h1].state != 'f') {
 //Удаление объекта с заданным ключом
 template <class K, class D>
 void HashTableOA<K, D>::Delete(K str) {
-	int h, h1, j = 0;
+	unsigned h;
+	int i = 0;
 	unsigned k = Key(str);
-	h = (int)(m * (A * k - (int)(A * k)));
+	h = Hash(k);
 	while (1) {
-		h1 = (h + j) % m;
-		if (List[h1].state == 'f')
+		h = Hash(k, i);
+		if (List[h].state == 'f')
 			throw exception("Этого элемента не существует!");
-		if (List[h1].state == 'b')
-			if (strcmp(List[h1].key, str) == 0) {
-				List[h1].state = 'd';
-				List[h1].key = NULL;
+		if (List[h].state == 'b')
+			if (strcmp(List[h].key, str) == 0) {
+				List[h].state = 'd';
+				List[h].key = NULL;
 				if (isEmpty())
-					for (int i = 0; i < m; i++)
+					for (int j = 0; i < m; j++)
 						List[i].state = 'f';
 				return;
 			}
-		j++;
-		if (j == m)
+		i++;
+		if (i == m)
 			throw exception("Этого элемента не существует!");
 	}
 }
@@ -211,18 +225,19 @@ void HashTableOA<K, D>::Delete(K str) {
 //Поиск объекта с заданным ключом
 template <class K, class D>
 D HashTableOA<K, D>::Search(K str) {
-	int h, h1, j = 0;
+	int i = 0;
+	unsigned h;
 	unsigned k = Key(str);
-	h = (int)(m * (A * k - (int)(A * k)));
+	h = Hash(k);
 	while (1) {
-		h1 = (h + j) % m;
-		if (List[h1].state == 'f')
+		h = Hash(k, i);
+		if (List[h].state == 'f')
 			throw exception("Этого элемента не существует!");
-		if (List[h1].state == 'b')
-			if (strcmp(List[h1].key, str) == 0)
-				return List[h1].data;
-		j++;
-		if (j == m)
+		if (List[h].state == 'b')
+			if (strcmp(List[h].key, str) == 0)
+				return List[h].data;
+		i++;
+		if (i == m)
 			throw exception("Этого элемента не существует!");
 	}
 }
@@ -231,27 +246,26 @@ D HashTableOA<K, D>::Search(K str) {
 template <class K, class D>
 int HashTableOA<K, D>::TestInsert(K str) {
 	int count = 0;
-	int h, h1, pos = -1, j = 0;
+	int pos = -1, i = 0;
+	unsigned h;
 	unsigned k = Key(str);
-	h = (int)(m * (A * k - (int)(A * k)));
-	h1 = h;
-	while (j != m && List[h1].state != 'f') {
-		h1 = (h + j) % m;
-		if (List[h1].state == 'd' && pos == -1) {
-			pos = h1; count++;
+	h = Hash(k);
+	while (i != m && List[h].state != 'f') {
+		count++;
+		h = Hash(k, i);
+		if (List[h].state == 'd' && pos == -1) {
+			pos = h;
 		}
-		if (List[h1].state == 'b') {
-			count++;
-			if (strcmp(List[h1].key, str) == 0)
+		if (List[h].state == 'b') {
+			if (strcmp(List[h].key, str) == 0)
 				return count;
 		}
-		j++;
+		i++;
 	}
-	if (j == m && List[h1].state == 'b' && pos == -1)
+	if (i == m && List[h].state == 'b' && pos == -1)
 		return count;
-	count++;
 	if (pos == -1)
-		pos = h1;
+		pos = h;
 	List[pos].key = str;
 	List[pos].state = 'b';
 	return count;
@@ -261,24 +275,25 @@ int HashTableOA<K, D>::TestInsert(K str) {
 template <class K, class D>
 int HashTableOA<K, D>::TestDelete(K str) {
 	int count = 0;
-	int h, h1, j = 0;
+	unsigned h;
+	int i = 0;
 	unsigned k = Key(str);
-	h = (int)(m * (A * k - (int)(A * k)));
+	h = Hash(k);
 	while (1) {
-		h1 = (h + j) % m;
-		if (List[h1].state == 'f')
-			return count;	//Элемент не найден
-		if (List[h1].state == 'b') {
-			count++;
-			if (strcmp(List[h1].key, str) == 0) {
-				List[h1].state = 'd';
-				List[h1].key = NULL;
+		count++;
+		h = Hash(k, i);
+		if (List[h].state == 'f')
+			return count;
+		if (List[h].state == 'b') {
+			if (strcmp(List[h].key, str) == 0) {
+				List[h].state = 'd';
+				List[h].key = NULL;
 				return count;
 			}
 		}
-		j++;
-		if (j == m)
-			return count;//Элемент не найден
+		i++;
+		if (i == m)
+			return count;
 	}
 }
 
@@ -286,20 +301,21 @@ int HashTableOA<K, D>::TestDelete(K str) {
 template <class K, class D>
 int HashTableOA<K, D>::TestSearch(K str) {
 	int count = 0;
-	int h, h1, j = 0;
+	int i = 0;
+	unsigned h;
 	unsigned k = Key(str);
-	h = (int)(m * (A * k - (int)(A * k)));
+	h = Hash(k);
 	while (1) {
-		h1 = (h + j) % m;
-		if (List[h1].state == 'f')
-			return count;//Элемент не найден
-		if (List[h1].state == 'b') {
-			count++;
-			if (strcmp(List[h1].key, str) == 0)
+		count++;
+		h = Hash(k, i);
+		if (List[h].state == 'f')
+			return count;
+		if (List[h].state == 'b') {
+			if (strcmp(List[h].key, str) == 0)
 				return count;
 		}
-		j++;
-		if (j == m)
+		i++;
+		if (i == m)
 			return count;
 	}
 }
@@ -309,13 +325,9 @@ template <class K, class D>
 void HashTableOA<K, D>::Print() {
 	for (int i = 0; i < m; i++) {
 		if (List[i].state == 'b')
-			cout << i << " - " << List[i].key << endl;
-		else {
-			if (List[i].state != 'f')
-				cout << i << " - " << List[i].state << endl;
-			else
-				cout << i << " - Пусто" << endl;
-			}
+			cout << i << " - " << List[i].key << " (" << List[i].state << ")" <<endl;
+		else
+			cout << i << " - (" << List[i].state << ")" << endl;
 	}
 }
 
@@ -352,6 +364,7 @@ public:
 	int TestSearch(K);
 	void Print();
 	int getM();
+	unsigned Hash(unsigned k);
 public:
 	class Iterator {
 		HashTableCC* ptr;
@@ -420,6 +433,13 @@ public:
 	}
 };
 
+template <class K, class D>
+unsigned HashTableCC<K, D>::Hash(unsigned k) {
+	double X = A * k;
+	X = X - (unsigned)X;
+	return (unsigned)(X * m);
+}
+
 //Конструктор
 template <class K, class D>
 HashTableCC<K, D>::HashTableCC(int k) {
@@ -475,8 +495,7 @@ double HashTableCC<K, D>::GetAlfa() {
 template <class K, class D>
 void HashTableCC<K, D>::Insert(K str, D val) {
 	unsigned k = Key(str);
-	int h = (int)(M * (A * k - (int)(A * k)));
-	h = (unsigned)(h % M);
+	int h = Hash(k);
 	if (List[h] == NULL) {
 		List[h] = new Node();
 		List[h]->next = NULL;
@@ -503,8 +522,7 @@ void HashTableCC<K, D>::Insert(K str, D val) {
 template <class K, class D>
 void HashTableCC<K, D>::Delete(K str) {
 	unsigned k = Key(str);
-	int h = (int)(M * (A * k - (int)(A * k)));
-	h = (unsigned)(h % M);
+	int h = Hash(k);
 	Node* p = List[h];
 	if (p == NULL)
 		throw exception("Этого элемента не существует!");
@@ -529,8 +547,7 @@ void HashTableCC<K, D>::Delete(K str) {
 template <class K, class D>
 D HashTableCC<K, D>::Search(K str) {
 	unsigned k = Key(str);
-	int h = (int)(M * (A * k - (int)(A * k)));
-	h = (unsigned)(h % M);
+	int h = Hash(k);
 	Node* t = List[h];
 	while (t != NULL) {
 		if (strcmp(t->key, str) == 0)
@@ -547,14 +564,15 @@ template <class K, class D>
 int HashTableCC<K, D>::TestInsert(K str) {
 	int count = 0;
 	unsigned k = Key(str);
-	int h = (int)(M * (A * k - (int)(A * k)));
-	h = (unsigned)(h % M);
+	unsigned h = Hash(k);
 	if (List[h] == NULL) {
+		count++;
 		List[h] = new Node();
 		List[h]->next = NULL;
 		List[h]->key = str;
 	}
 	else {
+		count++;
 		Node* p = List[h];
 		if (strcmp(p->key, str) == 0)
 			return count;
@@ -564,6 +582,7 @@ int HashTableCC<K, D>::TestInsert(K str) {
 			if (strcmp(p->key, str) == 0)
 				return count;
 		}
+		count++;
 		p->next = new Node();
 		p->next->next = NULL;
 		p->next->key = str;
@@ -576,12 +595,12 @@ template <class K, class D>
 int HashTableCC<K, D>::TestDelete(K str) {
 	int count = 0;
 	unsigned k = Key(str);
-	int h = (int)(M * (A * k - (int)(A * k)));
-	h = (unsigned)(h % M);
+	int h = Hash(k);
 	Node* p = List[h];
 	if (p == NULL)
 		return count;
 	if (strcmp(p->key, str) == 0) {
+		count++;
 		List[h] = List[h]->next;
 		delete p;
 		return count;
@@ -595,6 +614,7 @@ int HashTableCC<K, D>::TestDelete(K str) {
 	if (p->next == NULL) {
 		return count;
 	}
+	count++;
 	Node* t = p->next;
 	p->next = p->next->next;
 	delete t;
@@ -606,8 +626,7 @@ template <class K, class D>
 int HashTableCC<K, D>::TestSearch(K str) {
 	int count = 0;
 	unsigned k = Key(str);
-	int h = (int)(M * (A * k - (int)(A * k)));
-	h = (unsigned)(h % M);
+	int h = Hash(k);
 	Node* t = List[h];
 	while (t != NULL) {
 		count++;

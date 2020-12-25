@@ -55,8 +55,6 @@ public:
 		char k[100], c[22], * t, ** mas;
 		auto it_oa = htoa.begin();
 		auto it_cc = htcc.begin();
-		//HashTableOA <char*, int>::Iterator it_oa(&htoa);
-		//HashTableCC <char*, int>::Iterator it_cc(&htcc);
 		bool exit, iterator_exit;
 		while (true) {
 			system("cls");
@@ -450,7 +448,7 @@ public:
 					break;
 				}
 				cout << endl;
-				size = n * 2;
+				size = n;
 				htoa.~HashTableOA();
 				mas = new char* [(int)(alfa * size + 1)];
 				for (i = 0; i < (alfa * size); i++) {
@@ -505,7 +503,7 @@ public:
 					break;
 				}
 				cout << endl;
-				size = n / 2;
+				size = n;
 				htcc.~HashTableCC();
 				mas = new char* [(int)(alfa * size + 1)];
 				for (i = 0; i < (alfa * size); i++) {
