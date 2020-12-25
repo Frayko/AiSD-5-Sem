@@ -497,13 +497,9 @@ public:
 				system("cls");
 				cntI = cntD = cntS = 0;
 				cout << "Тестирование хеш-таблицы с цепочкой коллизий" << endl;
-				cout << "Введите альфа число (от 0.0 до 1.0): ";
+				cout << "Введите альфа число (от 0.0): ";
 				cin >> alfa;
-				if (alfa > 1.0) {
-					cout << "Альфа число " << alfa << " -> 1.0" << endl;
-					alfa = 1.0;
-				}
-				else if (alfa < 0.0) {
+				if (alfa < 0.0) {
 					cout << "Альфа число меньше нуля" << endl;
 					system("pause");
 					break;
@@ -548,9 +544,9 @@ public:
 					delete mas[i];
 				delete[] mas;
 				cout << "Операция\tЭксперимент\tТеория" << endl;
-				cout << "Вставка \t" << setprecision(3) << 2 * cntI / (alfa * size) << " с\t\t" << 0.9 * (0.5) * (1 + (1 / (1 - alfa)) * (1 / (1 - alfa))) + 0.1 * (0.5) * (1 + (1 / (1 - alfa))) << " с" << endl;
-				cout << "Удаление \t" << setprecision(3) << 2 * cntD / (alfa * size) << " с\t\t" << 0.9 * (0.5) * (1 + (1 / (1 - alfa))) + 0.1 * (0.5) * (1 + (1 / (1 - alfa)) * (1 / (1 - alfa))) << " с" << endl;
-				cout << "Поиск \t\t" << setprecision(3) << 2 * cntS / (alfa * size) << " с\t\t" << 0.9 * (0.5) * (1 + (1 / (1 - alfa))) + 0.1 * (0.5) * (1 + (1 / (1 - alfa)) * (1 / (1 - alfa))) << " с" << endl;
+				cout << "Вставка \t" << setprecision(3) << 2 * cntI / (alfa * size) << " с\t\t" << 0.9 * (1 + alfa) + 0.1 * (1 + (alfa / 2)) << " с" << endl;
+				cout << "Удаление \t" << setprecision(3) << 2 * cntD / (alfa * size) << " с\t\t" << 0.9 * (1 + (alfa / 2)) + 0.1 * (1 + alfa) << " с" << endl;
+				cout << "Поиск \t\t" << setprecision(3) << 2 * cntS / (alfa * size) << " с\t\t" << 0.9 * (1 + (alfa / 2)) + 0.1 * (1 + alfa) << " с" << endl;
 				system("pause");
 				break;
 			case 0:

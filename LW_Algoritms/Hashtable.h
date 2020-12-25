@@ -18,14 +18,12 @@ int m;
 
 //’еш-таблица с открытой адресацией
 template <class K, class D>
-class HashTableOA
-{	//Ёлемент хеш-таблицы
+class HashTableOA {
 	class Node {
 	public:
-		K key;//ключ
-		D data;//данные
-		char state;//состо€ние элемента
-		Node(char _state = 'f') : state(_state) {}
+		K key;
+		D data;
+		char state;
 	};
 protected:
 	Node* List;
@@ -116,7 +114,7 @@ public:
 template <class K, class D>
 HashTableOA<K, D>::HashTableOA(int k) {
 	A = (sqrt(5) - 1) / 2;
-	m = 2 * k;
+	m = k;
 	List = new Node[m];
 	for (int i = 0; i < m; i++) {
 		List[i].key = NULL;
@@ -334,9 +332,9 @@ template <class K, class D>
 class HashTableCC {
 	class Node {
 	public:
-		K key;			//ключ
-		D data;			//данные
-		Node* next;		//указатель на следующий элемент
+		K key;
+		D data;
+		Node* next;
 	};
 protected:
 	Node** List;
@@ -426,7 +424,7 @@ public:
 template <class K, class D>
 HashTableCC<K, D>::HashTableCC(int k) {
 	A = (sqrt(5) - 1) / 2;
-	M = k / 2;
+	M = k;
 	List = new Node * [M];
 	for (int i = 0; i < M; i++)
 		List[i] = NULL;
@@ -477,7 +475,8 @@ double HashTableCC<K, D>::GetAlfa() {
 template <class K, class D>
 void HashTableCC<K, D>::Insert(K str, D val) {
 	unsigned k = Key(str);
-	int h = (int)(M * (A * k - (int)(A * k)));	//ћультипликативный метод хешировани€
+	int h = (int)(M * (A * k - (int)(A * k)));
+	h = (unsigned)(h % M);
 	if (List[h] == NULL) {
 		List[h] = new Node();
 		List[h]->next = NULL;
@@ -505,6 +504,7 @@ template <class K, class D>
 void HashTableCC<K, D>::Delete(K str) {
 	unsigned k = Key(str);
 	int h = (int)(M * (A * k - (int)(A * k)));
+	h = (unsigned)(h % M);
 	Node* p = List[h];
 	if (p == NULL)
 		throw exception("Ётого элемента не существует!");
@@ -530,6 +530,7 @@ template <class K, class D>
 D HashTableCC<K, D>::Search(K str) {
 	unsigned k = Key(str);
 	int h = (int)(M * (A * k - (int)(A * k)));
+	h = (unsigned)(h % M);
 	Node* t = List[h];
 	while (t != NULL) {
 		if (strcmp(t->key, str) == 0)
@@ -547,14 +548,13 @@ int HashTableCC<K, D>::TestInsert(K str) {
 	int count = 0;
 	unsigned k = Key(str);
 	int h = (int)(M * (A * k - (int)(A * k)));
+	h = (unsigned)(h % M);
 	if (List[h] == NULL) {
-		count++;
 		List[h] = new Node();
 		List[h]->next = NULL;
 		List[h]->key = str;
 	}
 	else {
-		count++;
 		Node* p = List[h];
 		if (strcmp(p->key, str) == 0)
 			return count;
@@ -564,7 +564,6 @@ int HashTableCC<K, D>::TestInsert(K str) {
 			if (strcmp(p->key, str) == 0)
 				return count;
 		}
-		count++;
 		p->next = new Node();
 		p->next->next = NULL;
 		p->next->key = str;
@@ -578,6 +577,7 @@ int HashTableCC<K, D>::TestDelete(K str) {
 	int count = 0;
 	unsigned k = Key(str);
 	int h = (int)(M * (A * k - (int)(A * k)));
+	h = (unsigned)(h % M);
 	Node* p = List[h];
 	if (p == NULL)
 		return count;
@@ -607,6 +607,7 @@ int HashTableCC<K, D>::TestSearch(K str) {
 	int count = 0;
 	unsigned k = Key(str);
 	int h = (int)(M * (A * k - (int)(A * k)));
+	h = (unsigned)(h % M);
 	Node* t = List[h];
 	while (t != NULL) {
 		count++;
@@ -639,5 +640,5 @@ void HashTableCC<K, D>::Print() {
 
 template <class K, class D>
 int HashTableCC<K, D>::getM() {
-	return m;
+	return M;
 }
