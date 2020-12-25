@@ -31,6 +31,7 @@ private:
 			<< "[12] Iterator == end()" << endl
 			<< "[13] Iterator != begin()" << endl
 			<< "[14] Iterator != end()" << endl
+			<< "[15] Размер таблицы" << endl
 			<< "[0] Выход" << endl << endl << ">>> ";
 	}
 
@@ -215,6 +216,10 @@ public:
 							cout << "Результат: " << (it_oa != htoa.end()) << endl;
 							system("pause");
 							break;
+						case 15:
+							cout << "Размер таблицы: " << htoa.getM() << endl;
+							system("pause");
+							break;
 						case 0:
 							exit = true;
 						}
@@ -377,6 +382,10 @@ public:
 							break;
 						case 14:
 							cout << "Результат: " << (it_cc != htcc.end()) << endl;
+							system("pause");
+							break;
+						case 15:
+							cout << "Размер таблицы: " << htcc.getM() << endl;
 							system("pause");
 							break;
 						case 0:

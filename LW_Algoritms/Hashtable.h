@@ -42,6 +42,7 @@ public:
 	int TestDelete(K);
 	int TestSearch(K);
 	void Print();
+	int getM();
 
 	//Класс итератора
 public:
@@ -320,6 +321,11 @@ void HashTableOA<K, D>::Print() {
 	}
 }
 
+template <class K, class D>
+int HashTableOA<K, D>::getM() {
+	return m;
+}
+
 
 int M;
 
@@ -347,6 +353,7 @@ public:
 	int TestDelete(K);
 	int TestSearch(K);
 	void Print();
+	int getM();
 public:
 	class Iterator {
 		HashTableCC* ptr;
@@ -628,4 +635,9 @@ void HashTableCC<K, D>::Print() {
 		else
 			cout << i << " - Пусто" << endl;
 	}
+}
+
+template <class K, class D>
+int HashTableCC<K, D>::getM() {
+	return m;
 }
