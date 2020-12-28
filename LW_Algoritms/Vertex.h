@@ -4,6 +4,7 @@ class Vertex {
 	NameT name;     //Имя вершины
 	DataT data;     //Данные вершины
 public:
+	int index;
 	bool nameSet, dataSet;
 
 	//Конструкторы

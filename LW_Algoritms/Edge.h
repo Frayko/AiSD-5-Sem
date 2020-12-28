@@ -1,11 +1,11 @@
 #pragma once
 template <class VertexT, class WeightT, class DataT>
 class Edge {
-	VertexT *v1, *v2;   //Вершины, которые соединяет ребро
 	WeightT weight;     //Вес
 	DataT data;         //Данные ребра 
 	bool weightSet, dataSet;
 public:
+	VertexT* v1, * v2;   //Вершины, которые соединяет ребро
 	//Конструкторы
 	Edge(VertexT *v1, VertexT *v2) : v1(v1), v2(v2), weightSet(false), weight(0), dataSet(false) {}
 	Edge(VertexT *v1, VertexT *v2, WeightT weight) : v1(v1), v2(v2), weight(weight), weightSet(true), dataSet(false) {}

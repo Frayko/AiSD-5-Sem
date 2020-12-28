@@ -197,15 +197,8 @@ public:
 		if (data->insertVertex(vertexVector.size()) == false)
 			throw 1;
 		v->setName(i_to_s(sz));
-		sz++;
+		v->index = sz++;
 		vertexVector.push_back(v);
-		return v;
-	}
-	VertexT* insertVertex(int index) {
-		VertexT *v = new VertexT;
-		if (data->insertVertex(index) == false)
-			throw 1;
-		vertexVector.insert(vertexVector.begin() + index, v);
 		return v;
 	}
 	bool deleteVertex(VertexT *v) {
@@ -215,14 +208,9 @@ public:
 			cout << vertexVector.size() << " ";
 			vertexVector.erase(vertexVector.begin() + index);
 			cout << vertexVector.size() << "\n";
-			return true;
-		}
-		return false;
-	}
-	bool deleteVertex(int index) {
-		edgeCounter -= data->deleteEdgesFromVertex(index, directed);
-		if (data->deleteVertex(index)) {
-			vertexVector.erase(vertexVector.begin() + index);
+			for (int i = v->index; i < vertexVector.size(); i++) {
+				vertexVector[i]->index = i;	
+			}
 			return true;
 		}
 		return false;
@@ -845,8 +833,10 @@ public:
 		}
 		//Получение ребра
 		EdgeT* operator*() {
-			if (onEnd())
+			if (onEnd()) {
+				//return NULL;
 				throw "Ошибка чтения ребра";
+			}
 			if (useM)
 				return mIt->getEdge();
 			else

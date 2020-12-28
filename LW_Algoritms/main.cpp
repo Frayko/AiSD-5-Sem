@@ -721,6 +721,12 @@ int main() {
 					}
 					};
 				}
+				catch (const char* err) {
+					cout << err << endl;
+				}
+				catch (exception& ex) {
+					cout << ex.what() << endl;
+				}
 				catch (...) {
 					cout << "Îøèáêà!";
 				}

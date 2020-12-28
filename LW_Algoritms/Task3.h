@@ -8,46 +8,79 @@ class Task3 {
 	int** mass;
 	int V, v1;
 	int* distance, i;
+	int* ver;
+	int k;
 
-	void solveTask(int v1) {
-		if (distance)
-			delete[] distance;
+	void solveTask(int _end) {
+		int n = g->getVertexCount();
+		int* d; // минимальное расстояние
+		int* v; // посещенные вершины
+		int temp, minindex, min;
+		int begin_index = 0;
+		
+		d = new int[n];
+		v = new int[n];
 
-		V = g->getVertexCount();
-
-		this->v1 = v1;
-
-		distance = new int[V];
-
-		int count, index, u;
-		bool* visited = new bool[V];
-		for (i = 0; i < V; i++)
-		{
-			distance[i] = INT_MAX; visited[i] = false;
+		for (int i = 0; i < n; i++) {
+			d[i] = 10000;
+			v[i] = 1;
 		}
-		distance[v1] = 0;
-		for (count = 0; count < V - 1; count++)
-		{
-			int min = INT_MAX;
-			for (i = 0; i < V; i++)
-				if (!visited[i] && distance[i] <= min)
-				{
-					min = distance[i]; index = i;
+		d[begin_index] = 0;
+		do {
+			minindex = 10000;
+			min = 10000;
+			for (int i = 0; i < n; i++) {
+				if ((v[i] == 1) && (d[i] < min)) {
+					min = d[i];
+					minindex = i;
 				}
-			u = index;
-			visited[u] = true;
-			for (i = 0; i < V; i++)
-				if (!visited[i] && mass[u][i] && distance[u] != INT_MAX &&
-					distance[u] + mass[u][i] < distance[i])
-					distance[i] = distance[u] + mass[u][i];
+			}
+			if (minindex != 10000)
+			{
+				for (int i = 0; i < n; i++)
+				{
+					if (mass[minindex][i] >= 0)
+					{
+						temp = min + mass[minindex][i];
+						if (temp < d[i])
+						{
+							d[i] = temp;
+						}
+					}
+				}
+				v[minindex] = 0;
+			}
+		} while (minindex < 10000);
+
+		cout << " Кратчайшие расстояния до вершин: " << endl; 
+		for (int i = 0; i < n; i++)
+			cout << d[i] << " ";
+
+		ver = new int[n];
+		int end = _end;
+		ver[0] = end;
+		k = 1;
+		int weight = d[end];
+
+		while (end != begin_index) {
+			for (int i = 0; i < n; i++)
+				if (mass[i][end] >= 0 && i != end) {
+					int temp = weight - mass[i][end];
+					if (temp == d[i]) {
+						weight = temp;
+						end = i;
+						ver[k] = i;
+						k++;
+					}
+				}
 		}
 
-		delete[] visited;
-
-		cout << "Стоимость пути из начальной вершины до остальных:" << endl;
-		for (i = 0; i < V; i++) if (distance[i] != INT_MAX)
-			cout << v1 << " -> " << i + 1 << " = " << distance[i] << endl;
-		else cout << v1 << " -> " << i + 1 << " = " << "маршрут недоступен" << endl;
+		cout << endl << "Вывод кратчайшего пути" << endl;
+		for (int i = k - 1; i >= 0; i--)
+			cout << ver[i] << " ";
+		cout << endl;
+		delete[] d;
+		delete[] v;
 	}
 
 	void init_mass() {
@@ -77,7 +110,7 @@ class Task3 {
 					mass[i][j] = e->getWeight();
 				}
 				else {
-					mass[i][j] = 0;
+					mass[i][j] = -1;
 				}
 			}
 		}
@@ -131,9 +164,9 @@ public:
 	}
 
 	void Result() {
-		cout << "Стоимость пути из начальной вершины до остальных:" << endl;
-		for (i = 0; i < V; i++) if (distance[i] != INT_MAX)
-			cout << v1 << " -> " << i + 1 << " = " << distance[i] << endl;
-		else cout << v1 << " -> " << i + 1 << " = " << "маршрут недоступен" << endl;
+		cout << endl << "Вывод кратчайшего пути" << endl;
+		for (int i = k - 1; i >= 0; i--)
+			cout << ver[i] << "->";
+		cout << endl;
 	}
 };
