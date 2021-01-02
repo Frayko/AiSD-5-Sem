@@ -5,6 +5,8 @@
 template <class Vertex, class Edge>
 class Task2 {
 	Graph<Vertex, Edge>* g;
+	vector<int*> results;
+	int* way;
 	
 	struct VertexSimply {
 		int vertex;
@@ -66,11 +68,12 @@ class Task2 {
 		}
 	};
 
-	int way[200];
-
 	void Route(int v1) {
-		VertexSimply* v[200];
-		for (int i = 0; i < g->getVertexCount(); i++)
+		int n = g->getVertexCount();
+		way = new int[n];
+		VertexSimply** v;
+		v = new VertexSimply* [n];
+		for (int i = 0; i < n; i++)
 			v[i] = new VertexSimply(i);
 		int curr_v = v1;
 		int son_v = 0;
@@ -79,9 +82,9 @@ class Task2 {
 		v[curr_v]->parrent = -1;
 		st.push(v[curr_v]);
 		while (st.state()) {
-			v[g->getVertexCount()] = st.pop();
-			v[g->getVertexCount()]->state = true;
-			curr_v = v[g->getVertexCount()]->vertex;
+			v[n] = st.pop();
+			v[n]->state = true;
+			curr_v = v[n]->vertex;
 			typename Graph<Vertex, Edge>::OutputEdgeIterator Iterator(g, curr_v);
 			try {
 				Edge* Ed = *Iterator;
@@ -103,10 +106,11 @@ class Task2 {
 			}
 			catch(...) {}
 		}
-		for (int i = 0; i < g->getVertexCount(); i++) {
+		for (int i = 0; i < n; i++) {
 			if (i != v1) {
 				cout << "Кратчайший путь из " << v1 << " в " << i << ": ";
 				int j = 0;
+				way = new int[n];
 				way[j] = i;
 				int v2 = v[i]->vertex;
 				while (v2 != v1) {
@@ -115,6 +119,7 @@ class Task2 {
 					way[j] = v2;
 				}
 				way[j + 1] = -1;
+				results.push_back(way);
 				cout << way[j];
 				while (j != 0) {
 					j--;
@@ -123,7 +128,7 @@ class Task2 {
 				cout << endl;
 			}
 		}
-		for (int i = 0; i < g->getVertexCount(); i++)
+		for (int i = 0; i < n; i++)
 			delete v[i];
 	}
 
@@ -137,7 +142,9 @@ public:
 	}
 	Task2(Task2& T) {}
 
-	~Task2() {}
+	~Task2() {
+		delete[] way;
+	}
 
 	void Set(Graph<Vertex, Edge>* g) {
 		this->g = g;
@@ -152,8 +159,18 @@ public:
 	}
 
 	void Result() {
-		for (int i = 0; i < g->getVertexCount(); i++) {
-			Route(i);
+		int n = g->getVertexCount();
+		for (int i = 0; i < results.size(); i++) {
+			int* buf = new int[n];
+			buf = results[i];
+			int k = 0;
+			for (; buf[k] != -1; ++k);
+			cout << "Кратчайший путь из " << buf[k - 1] << " в " << buf[0] << ": ";
+			cout << buf[k - 1];
+			for (int j = k - 2; j >= 0; j--) {
+				cout << "->" << buf[j];
+			}
+			cout << endl;
 		}
 	}
 };

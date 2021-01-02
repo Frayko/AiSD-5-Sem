@@ -6,18 +6,29 @@ template <class Vertex, class Edge>
 class Task3 {
 	Graph<Vertex, Edge>* g;
 	int** mass;
-	int V, v1;
-	int* distance, i;
-	int* ver;
-	int k;
+	int* d, * ver;
+	vector<int*> results;
+	vector<int*> dist;
 
-	void solveTask(int _end) {
+	void solveTask(int target) {
 		int n = g->getVertexCount();
-		int* d; // минимальное расстояние
-		int* v; // посещенные вершины
+		int k = 0;
+		for (int i = 0; i < n - 1; i++) {
+			if (i != target)
+				if (dijkstra(i, target))
+					k++;
+		}
+		if (k == 0)
+			cout << "Кратчаших путей в " << target << " не обнаружено" << endl;
+	}
+
+	bool dijkstra(int _start, int _end) {
+		int k;
+		int n = g->getVertexCount();
+		int* v;
 		int temp, minindex, min;
-		int begin_index = 0;
-		
+		int begin_index = _start;
+
 		d = new int[n];
 		v = new int[n];
 
@@ -26,7 +37,13 @@ class Task3 {
 			v[i] = 1;
 		}
 		d[begin_index] = 0;
+
+		int cnt = 0;
+
 		do {
+			if (cnt > (n * n))
+				return false;
+
 			minindex = 10000;
 			min = 10000;
 			for (int i = 0; i < n; i++) {
@@ -50,19 +67,20 @@ class Task3 {
 				}
 				v[minindex] = 0;
 			}
+			cnt++;
 		} while (minindex < 10000);
 
-		cout << " Кратчайшие расстояния до вершин: " << endl; 
-		for (int i = 0; i < n; i++)
-			cout << d[i] << " ";
-
-		ver = new int[n];
+		ver = new int[n + 1];
 		int end = _end;
 		ver[0] = end;
 		k = 1;
 		int weight = d[end];
 
+		cnt = 0;
+
 		while (end != begin_index) {
+			if (cnt > (n * n))
+				return false;
 			for (int i = 0; i < n; i++)
 				if (mass[i][end] >= 0 && i != end) {
 					int temp = weight - mass[i][end];
@@ -73,14 +91,19 @@ class Task3 {
 						k++;
 					}
 				}
+			cnt++;
 		}
 
-		cout << endl << "Вывод кратчайшего пути" << endl;
+		ver[k] = -1;
+		results.push_back(ver);
+		dist.push_back(d);
+
+		cout << "Кратчайший путь из " << _start << " в " << _end << " (общий вес: " << d[_end] << "): ";
 		for (int i = k - 1; i >= 0; i--)
 			cout << ver[i] << " ";
 		cout << endl;
-		delete[] d;
 		delete[] v;
+		return true;
 	}
 
 	void init_mass() {
@@ -114,8 +137,6 @@ class Task3 {
 				}
 			}
 		}
-
-		print();
 	}
 
 	void print() {
@@ -130,7 +151,6 @@ class Task3 {
 public:
 	Task3(Graph<Vertex, Edge>* g, int i) {
 		this->g = g;
-		cout << "Матрица смежности графа: " << endl;
 		init_mass();
 		solveTask(i);
 	}
@@ -147,14 +167,12 @@ public:
 			}
 			mass = nullptr;
 		}
-
-		if (distance)
-			delete[] distance;
+		delete[] d;
+		delete[] ver;
 	}
 
 	void Set(Graph<Vertex, Edge>* g, int i) {
 		this->g = g;
-		cout << "Матрица смежности графа: " << endl;
 		init_mass();
 		solveTask(i);
 	}
@@ -164,9 +182,22 @@ public:
 	}
 
 	void Result() {
-		cout << endl << "Вывод кратчайшего пути" << endl;
-		for (int i = k - 1; i >= 0; i--)
-			cout << ver[i] << "->";
-		cout << endl;
+		if (results.size() == 0) {
+			cout << "Результатов задачи нет" << endl;
+			return;
+		}
+		int n = g->getVertexCount();
+		for (int i = 0; i < results.size(); i++) {
+			int* buf = new int[n + 1];
+			int* d = new int[n];
+			d = dist[i];
+			buf = results[i];
+			int k = 0;
+			for (; buf[k] != -1; ++k);
+			cout << "Кратчайший путь из " << buf[k - 1] << " в " << buf[0] << " (общий вес: " << d[buf[0]] << "): ";
+			for (int j = k - 1; j >= 0; j--)
+				cout << buf[j] << ' ';
+			cout << endl;
+		}
 	}
 };
